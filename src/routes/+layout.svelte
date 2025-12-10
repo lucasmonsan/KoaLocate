@@ -1,5 +1,7 @@
 <script lang="ts">
 	import favicon from '$lib/assets/favicon.svg';
+	import Map from '$lib/components/map/Map.svelte';
+	import '../app.css';
 
 	let { children } = $props();
 </script>
@@ -8,4 +10,5 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
+<Map />
 {@render children()}

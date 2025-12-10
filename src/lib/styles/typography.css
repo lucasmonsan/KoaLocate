@@ -1,0 +1,82 @@
+@font-face {
+	font-family: 'Nunito';
+	font-style: normal;
+	font-weight: 200 1000;
+	font-display: swap;
+	src: url('$lib/assets/fonts/Nunito-Variable.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: 'Nunito';
+	font-style: italic;
+	font-weight: 200 1000;
+	font-display: swap;
+	src: url('$lib/assets/fonts/Nunito-Italic-Variable.woff2') format('woff2');
+}
+
+:root {
+	--font-main: 'Nunito', sans-serif;
+}
+
+body {
+	font-family: var(--font-main);
+	font-weight: 400;
+	color: var(--color-text-primary);
+	font-size: var(--md);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-weight: 800;
+	line-height: 1.2;
+	margin-top: 0;
+	margin-bottom: var(--padd-component);
+	color: var(--color-text-primary);
+}
+
+h1 {
+	font-size: var(--xxxxl);
+}
+h2 {
+	font-size: var(--xxxl);
+}
+h3 {
+	font-size: var(--xxl);
+}
+h4 {
+	font-size: var(--xl);
+}
+h5 {
+	font-size: var(--lg);
+}
+h6 {
+	font-size: var(--md);
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	font-weight: 700;
+}
+
+small {
+	font-size: var(--sm);
+	color: var(--color-text-secondary);
+}
+
+strong,
+b {
+	font-weight: 700;
+}
+
+a {
+	color: var(--color-primary);
+	text-decoration: none;
+	font-weight: 600;
+	transition: color var(--fast);
+}
+
+a:hover {
+	color: var(--color-primary-dark);
+}
