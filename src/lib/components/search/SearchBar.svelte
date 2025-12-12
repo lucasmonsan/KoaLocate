@@ -31,7 +31,7 @@
 		height: var(--xxxl, 3rem);
 		padding: 0 var(--xxs, 0.4rem) 0 var(--xs, 0.6rem);
 		border-radius: var(--radius-out, 1rem);
-		box-shadow: var(--shadow-md, 0 4px 6px rgba(0, 0, 0, 0.1));
+		box-shadow: var(--shadow-md, 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -1px rgb(0 0 0 / 0.06));
 		background: var(--surface, #ffffff);
 	}
 

@@ -22,7 +22,7 @@
 		min-width: var(--xl, 1.5rem);
 		min-height: var(--xl, 1.5rem);
 		padding: var(--xxs, 0.4rem);
-		box-shadow: var(--shadow-md, 0 4px 6px rgba(0, 0, 0, 0.1));
+		box-shadow: var(--shadow-md, 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -1px rgb(0 0 0 / 0.06));
 		background: var(--surface, #ffffff);
 		color: var(--text-primary, #101214);
 

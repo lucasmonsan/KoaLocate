@@ -3,7 +3,7 @@
 	const hints = ['Busque pela rua, bairro, cidade ou ponto turístico.', 'Empresas e comércios também podem ser encontrados.', 'Rua sem numeração? Só adicionar na sua análise.'];
 </script>
 
-<div style="box-shadow: var(--shadow-black);" transition:fade={{ duration: 250 }}>
+<div class="shadow" transition:fade={{ duration: 250 }}>
 	<div transition:slide={{ axis: 'y' }}>
 		<p>💡 Dicas de pesquisa:</p>
 		<ul>
@@ -18,33 +18,37 @@
 	div {
 		display: flex;
 		flex-direction: column;
-		gap: var(--xxxs);
+		gap: var(--xxxs, 0.25rem);
 		width: 100%;
-		padding: var(--xxs);
-		border-radius: var(--radius-2);
-		background: var(--surface);
+		padding: var(--xxs, 0.5rem);
+		border-radius: var(--radius-out, 1rem);
+		background: var(--surface, #ffffff);
+
+		&.shadow {
+			box-shadow: var(--shadow-md, 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -1px rgb(0 0 0 / 0.06));
+		}
 	}
 
 	p {
 		width: 100%;
-		margin: var(--xxxs) 0;
-		font-size: calc(var(--xs) * 1.15);
-		color: var(--text-secondary);
+		margin: var(--xxxs, 0.25rem) 0;
+		font-size: calc(var(--xs, 0.75rem) * 1.15);
+		color: var(--text-secondary, #6c757d);
 		text-transform: uppercase;
 		font-weight: 800;
 		opacity: 0.75;
 	}
 
 	ul {
-		padding-left: var(--xxxs);
+		padding-left: var(--xxxs, 0.25rem);
 		list-style-position: inside;
 	}
 
 	li {
-		padding: var(--xxxs) 0;
+		padding: var(--xxxs, 0.25rem) 0;
 		margin: 0;
-		font-size: calc(var(--xs) * 1.1);
+		font-size: calc(var(--xs, 0.75rem) * 1.1);
 		font-weight: 500;
-		color: var(--text-secondary);
+		color: var(--text-secondary, #6c757d);
 	}
 </style>

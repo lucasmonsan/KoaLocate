@@ -5,6 +5,7 @@
 	import SearchHints from '$lib/components/search/SearchHints.svelte';
 	import GPSIcon from '$lib/icons/GPSIcon.svelte';
 	import ProfileIcon from '$lib/icons/ProfileIcon.svelte';
+	import { mapState } from '../map/map.svelte';
 
 	let showHints = $derived(searchState.focused || searchState.query.length > 0);
 </script>
@@ -19,7 +20,7 @@
 			<ProfileIcon />
 		</Button>
 		<SearchBar />
-		<Button variant="icon" border="out">
+		<Button variant="icon" border="out" onclick={() => mapState.locateUser()}>
 			<GPSIcon />
 		</Button>
 	</nav>

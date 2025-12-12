@@ -1,5 +1,6 @@
 <script lang="ts">
 	import 'leaflet/dist/leaflet.css';
+	import { mapState } from './map.svelte';
 
 	let mapElement: HTMLElement;
 
@@ -28,6 +29,8 @@
 				attribution: '&copy; OpenStreetMap contributors'
 			}).addTo(map);
 
+			mapState.setMap(map);
+
 			resizeObserver = new ResizeObserver(() => map.invalidateSize());
 			resizeObserver.observe(mapElement);
 		};
@@ -37,6 +40,7 @@
 		return () => {
 			resizeObserver?.disconnect();
 			map?.remove();
+			mapState.setMap(null);
 		};
 	});
 </script>
