@@ -17,6 +17,32 @@
 		inputElement?.blur();
 		searchState.search();
 	}
+
+	function handleKeydown(e: KeyboardEvent) {
+		if (searchState.results.length === 0) return;
+
+		switch (e.key) {
+			case 'ArrowDown':
+				e.preventDefault();
+				searchState.navigateDown();
+				break;
+			case 'ArrowUp':
+				e.preventDefault();
+				searchState.navigateUp();
+				break;
+			case 'Enter':
+				if (searchState.focusedIndex >= 0) {
+					e.preventDefault();
+					searchState.selectFocused();
+				}
+				break;
+			case 'Escape':
+				e.preventDefault();
+				searchState.closeResults();
+				inputElement?.blur();
+				break;
+		}
+	}
 </script>
 
 <form
@@ -31,9 +57,13 @@
 		placeholder={i18n.t.search.placeholder}
 		bind:value={searchState.query}
 		oninput={(e) => searchState.setQuery(e.currentTarget.value)}
+		onkeydown={handleKeydown}
 		onfocus={() => (searchState.focused = true)}
 		onblur={() => (searchState.focused = false)}
 		aria-label={i18n.t.buttons.search}
+		aria-autocomplete="list"
+		aria-controls="search-results"
+		aria-expanded={searchState.results.length > 0}
 	/>
 
 	<Button

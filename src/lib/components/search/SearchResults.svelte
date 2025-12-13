@@ -1,16 +1,25 @@
 <script lang="ts">
-	import { fade, slide } from 'svelte/transition';
+	import { slide } from 'svelte/transition';
 	import { searchState } from './search.svelte';
 	import { getPlaceLabel } from '$lib/utils/osm';
 	import { highlightMatch } from '$lib/utils/string';
 	import { i18n } from '$lib/i18n/index.svelte';
+
+	let listElements: (HTMLLIElement | null)[] = [];
+
+	$effect(() => {
+		const focusedEl = listElements[searchState.focusedIndex];
+		if (focusedEl) {
+			focusedEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+		}
+	});
 </script>
 
 {#if searchState.results.length > 0}
-	<div class="results-container shadow" transition:slide={{ axis: 'y' }}>
+	<div id="search-results" class="results-container shadow" transition:slide={{ axis: 'y' }}>
 		<ul role="listbox">
 			{#each searchState.results as result, index}
-				<li role="option" aria-selected="false">
+				<li bind:this={listElements[index]} role="option" aria-selected={searchState.focusedIndex === index} class:focused={searchState.focusedIndex === index}>
 					<button onclick={() => searchState.selectResult(result)} aria-label={`${result.properties.name}, ${getPlaceLabel(result.properties)}`}>
 						<div>
 							<strong>{@html highlightMatch(result.properties.name, searchState.query)}</strong>
@@ -75,8 +84,15 @@
 
 	li {
 		border-bottom: 1px solid var(--border);
+
 		&:last-child {
 			border-bottom: none;
+		}
+
+		&.focused button {
+			background: var(--bg);
+			outline: 2px solid var(--brand-primary);
+			outline-offset: -2px;
 		}
 	}
 

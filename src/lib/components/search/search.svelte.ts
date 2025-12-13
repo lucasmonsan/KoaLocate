@@ -13,6 +13,7 @@ class SearchState {
   loading = $state(false);
   results = $state<OSMFeature[]>([]);
   hasSearched = $state(false);
+  focusedIndex = $state(-1);
 
   lastSearchedQuery = $state('');
   private isResultSelected = false;
@@ -27,32 +28,30 @@ class SearchState {
     this.hasSearched = false;
     this.isResultSelected = false;
     this.lastSearchedQuery = '';
+    this.focusedIndex = -1;
   }
 
   setQuery(value: string) {
     this.query = value;
     this.isResultSelected = false;
+    this.focusedIndex = -1;
 
-    // Se query vazia, limpa resultados
     if (value.length === 0) {
       this.results = [];
       this.hasSearched = false;
       return;
     }
 
-    // Se query muito curta, não busca
     if (value.length < SEARCH_CONFIG.MIN_QUERY_LENGTH) {
       this.results = [];
       this.hasSearched = false;
       return;
     }
 
-    // Busca instantânea no cache
     const localResults = this.searchInCache(value);
 
     if (localResults && localResults.length > 0) {
       this.results = localResults;
-      // NÃO marca hasSearched = true (não buscou na API ainda)
     } else {
       this.results = [];
     }
@@ -65,7 +64,6 @@ class SearchState {
     this.hasSearched = false;
 
     try {
-      // Tenta cache exato primeiro
       const cached = this.getFromCache(this.query);
       if (cached) {
         this.results = cached;
@@ -73,7 +71,6 @@ class SearchState {
         return;
       }
 
-      // Busca na API
       const data = await this.fetchFromAPI();
       this.processResults(data);
 
@@ -93,13 +90,36 @@ class SearchState {
     this.isResultSelected = true;
     this.results = [];
     this.focused = false;
+    this.focusedIndex = -1;
 
     mapState.selectLocation(result);
   }
 
-  // ============================================
-  // MÉTODOS PRIVADOS - Lógica de Busca
-  // ============================================
+  navigateUp() {
+    if (this.results.length === 0) return;
+    this.focusedIndex = this.focusedIndex <= 0
+      ? this.results.length - 1
+      : this.focusedIndex - 1;
+  }
+
+  navigateDown() {
+    if (this.results.length === 0) return;
+    this.focusedIndex = this.focusedIndex >= this.results.length - 1
+      ? 0
+      : this.focusedIndex + 1;
+  }
+
+  selectFocused() {
+    if (this.focusedIndex >= 0 && this.focusedIndex < this.results.length) {
+      this.selectResult(this.results[this.focusedIndex]);
+    }
+  }
+
+  closeResults() {
+    this.results = [];
+    this.focusedIndex = -1;
+    this.focused = false;
+  }
 
   private shouldPerformSearch(): boolean {
     if (!this.query.trim()) return false;
@@ -140,7 +160,6 @@ class SearchState {
       throw new Error('API request failed');
     }
 
-    // Remove language parameter and retry
     const fallbackUrl = originalUrl.replace(`&lang=${API.DEFAULT_LANG}`, '');
     const fallbackResponse = await fetch(fallbackUrl);
 
@@ -169,10 +188,6 @@ class SearchState {
     this.lastSearchedQuery = this.query;
   }
 
-  // ============================================
-  // MÉTODOS PRIVADOS - Normalização e Filtragem
-  // ============================================
-
   private filterDuplicates(features: OSMFeature[]): OSMFeature[] {
     if (!Array.isArray(features)) return [];
 
@@ -180,18 +195,15 @@ class SearchState {
     const seenKeys = new Set<string>();
 
     return features.filter((feature) => {
-      // Normaliza país
       if (feature.properties.country === 'Brazil') {
         feature.properties.country = 'Brasil';
       }
 
-      // Remove duplicados por ID
       if (feature.properties.osm_id) {
         if (seenIds.has(feature.properties.osm_id)) return false;
         seenIds.add(feature.properties.osm_id);
       }
 
-      // Remove duplicados por chave única
       const uniqueKey = this.generateUniqueKey(feature);
       const name = normalizeStr(feature.properties.name);
 
@@ -215,10 +227,6 @@ class SearchState {
 
     return `poi|${name}|${city}|${street}`;
   }
-
-  // ============================================
-  // MÉTODOS PRIVADOS - Cache
-  // ============================================
 
   private getCache(): CacheItem[] {
     if (typeof localStorage === 'undefined') return [];
@@ -245,12 +253,10 @@ class SearchState {
     const cache = this.getCache();
     const normalizedQuery = normalizeStr(partialQuery);
 
-    // Busca em TODAS as entradas do cache
     const allMatches = this.collectMatchesFromCache(cache, normalizedQuery);
 
     if (allMatches.length === 0) return null;
 
-    // Remove duplicados e ordena por relevância
     const uniqueMatches = this.deduplicateMatches(allMatches);
     const sortedResults = this.sortByRelevance(uniqueMatches, normalizedQuery);
 
