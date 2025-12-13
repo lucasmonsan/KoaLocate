@@ -1,6 +1,10 @@
 <script>
 	import { fade, slide } from 'svelte/transition';
-	const hints = ['Busque pela rua, bairro, cidade ou ponto turístico.', 'Empresas e comércios também podem ser encontrados.', 'Rua sem numeração? Só adicionar na sua análise.'];
+	const hints = [
+		'Busque pela rua, bairro, cidade, ponto turístico, empresa ou nome de comércio.',
+		'O resultado desejado não apareceu? Tente ser mais específico.',
+		'Rua sem numeração? Só adicionar na sua análise.'
+	];
 </script>
 
 <div class="shadow" transition:fade={{ duration: 250 }}>

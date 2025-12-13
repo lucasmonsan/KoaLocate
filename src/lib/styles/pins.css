@@ -1,0 +1,57 @@
+.pin-marker {
+	background: var(--brand-primary);
+	border: var(--border-width) solid var(--surface);
+	border-radius: 50%;
+	width: var(--md);
+	height: var(--md);
+	box-shadow:
+		0 0 0 2px rgb(0 0 0 / 0.1),
+		var(--shadow-md);
+	transition: transform var(--fast);
+}
+
+.pin-marker:hover {
+	transform: scale(1.2);
+	background: var(--brand-secondary);
+}
+
+.area-marker {
+	position: relative;
+	width: var(--md);
+	height: var(--md);
+	background: var(--brand-primary);
+	border: var(--border-width) solid var(--surface);
+	border-radius: 50%;
+	box-shadow: var(--shadow-md);
+	pointer-events: none !important;
+}
+
+.area-marker::after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: calc(var(--xxxl) * 2);
+	height: calc(var(--xxxl) * 2);
+	background: var(--brand-primary);
+	opacity: 0.2;
+	border-radius: 50%;
+	pointer-events: none;
+	animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+	0% {
+		transform: translate(-50%, -50%) scale(0.95);
+		opacity: 0.2;
+	}
+	50% {
+		transform: translate(-50%, -50%) scale(1.05);
+		opacity: 0.15;
+	}
+	100% {
+		transform: translate(-50%, -50%) scale(0.95);
+		opacity: 0.2;
+	}
+}

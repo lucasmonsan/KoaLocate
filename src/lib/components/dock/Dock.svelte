@@ -1,17 +1,21 @@
 <script>
 	import { searchState } from '$lib/components/search/search.svelte';
+	import { mapState } from '$lib/components/map/map.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import SearchBar from '$lib/components/search/SearchBar.svelte';
 	import SearchHints from '$lib/components/search/SearchHints.svelte';
+	import SearchResults from '$lib/components/search/SearchResults.svelte';
 	import GPSIcon from '$lib/icons/GPSIcon.svelte';
 	import ProfileIcon from '$lib/icons/ProfileIcon.svelte';
-	import { mapState } from '../map/map.svelte';
 
-	let showHints = $derived(searchState.focused || searchState.query.length > 0);
+	let showHints = $derived(searchState.focused && searchState.query.length === 0 && searchState.results.length === 0);
+	let showResults = $derived(searchState.results.length > 0 || searchState.hasSearched);
 </script>
 
 <footer>
-	{#if showHints}
+	{#if showResults}
+		<SearchResults />
+	{:else if showHints}
 		<SearchHints />
 	{/if}
 
