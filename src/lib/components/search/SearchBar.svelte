@@ -4,7 +4,7 @@
 	import LoadingIcon from '$lib/icons/LoadingIcon.svelte';
 	import Button from '../ui/Button.svelte';
 	import { searchState } from './search.svelte';
-	import { i18n } from '$lib/i18n';
+	import { i18n } from '$lib/i18n/index.svelte';
 
 	let inputElement: HTMLInputElement | undefined = $state();
 

@@ -1,5 +1,5 @@
 import type { OSMProperties, PlaceType } from '$lib/types/osm.types';
-import { i18n } from '$lib/i18n';
+import { i18n } from '$lib/i18n/index.svelte';
 
 export const getPlaceLabel = (properties: OSMProperties): string => {
   const { osm_key, osm_value } = properties;

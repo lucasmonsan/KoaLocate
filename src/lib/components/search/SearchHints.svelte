@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { fade, slide } from 'svelte/transition';
-	import { i18n } from '$lib/i18n';
+	import { i18n } from '$lib/i18n/index.svelte';
 </script>
 
 <div class="shadow" transition:fade={{ duration: 250 }}>

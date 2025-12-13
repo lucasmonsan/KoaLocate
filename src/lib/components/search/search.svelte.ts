@@ -1,10 +1,9 @@
-// $lib/components/search/search.svelte.ts
-
 import type { OSMFeature, PhotonResponse } from '$lib/types/osm.types';
 import type { CacheItem } from '$lib/types/search.types';
 import { mapState } from '../map/map.svelte';
 import { API } from '$lib/constants/api';
 import { CACHE_CONFIG, SEARCH_CONFIG } from '$lib/constants/config';
+import { normalizeStr } from '$lib/utils/string';
 
 class SearchState {
   query = $state('');
@@ -31,14 +30,27 @@ class SearchState {
   setQuery(value: string) {
     this.query = value;
     this.isResultSelected = false;
-    this.hasSearched = false;
 
-    if (value.length > SEARCH_CONFIG.MIN_QUERY_LENGTH - 1) {
-      const localResults = this.searchInCache(value);
-      if (localResults && localResults.length > 0) {
-        this.results = localResults;
-        this.hasSearched = true;
-      }
+    // Se query vazia, limpa resultados
+    if (value.length === 0) {
+      this.results = [];
+      this.hasSearched = false;
+      return;
+    }
+
+    // Se query muito curta, não busca
+    if (value.length < SEARCH_CONFIG.MIN_QUERY_LENGTH) {
+      this.results = [];
+      this.hasSearched = false;
+      return;
+    }
+
+    // Busca instantânea no cache
+    const localResults = this.searchInCache(value);
+
+    if (localResults && localResults.length > 0) {
+      this.results = localResults;
+      // NÃO marca hasSearched = true (não buscou na API ainda)
     } else {
       this.results = [];
     }
@@ -157,10 +169,6 @@ class SearchState {
   // MÉTODOS PRIVADOS - Normalização e Filtragem
   // ============================================
 
-  private normalizeStr(str: string | undefined): string {
-    return str ? str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") : '';
-  }
-
   private filterDuplicates(features: OSMFeature[]): OSMFeature[] {
     if (!Array.isArray(features)) return [];
 
@@ -181,7 +189,7 @@ class SearchState {
 
       // Remove duplicados por chave única
       const uniqueKey = this.generateUniqueKey(feature);
-      const name = this.normalizeStr(feature.properties.name);
+      const name = normalizeStr(feature.properties.name);
 
       if (!name) return true;
 
@@ -193,9 +201,9 @@ class SearchState {
 
   private generateUniqueKey(feature: OSMFeature): string {
     const p = feature.properties;
-    const name = this.normalizeStr(p.name);
-    const city = this.normalizeStr(p.city);
-    const street = this.normalizeStr(p.street);
+    const name = normalizeStr(p.name);
+    const city = normalizeStr(p.city);
+    const street = normalizeStr(p.street);
 
     if (p.osm_key === 'highway') {
       return `street|${name}|${city}`;
@@ -231,7 +239,7 @@ class SearchState {
 
   private searchInCache(partialQuery: string): OSMFeature[] | null {
     const cache = this.getCache();
-    const normalizedQuery = this.normalizeStr(partialQuery);
+    const normalizedQuery = normalizeStr(partialQuery);
 
     // Busca em TODAS as entradas do cache
     const allMatches = this.collectMatchesFromCache(cache, normalizedQuery);
@@ -250,7 +258,7 @@ class SearchState {
 
     cache.forEach(cacheItem => {
       const filtered = cacheItem.results.filter(result => {
-        const name = this.normalizeStr(result.properties.name);
+        const name = normalizeStr(result.properties.name);
         return name.includes(normalizedQuery);
       });
       allMatches.push(...filtered);
@@ -273,8 +281,8 @@ class SearchState {
 
   private sortByRelevance(results: OSMFeature[], normalizedQuery: string): OSMFeature[] {
     return results.sort((a, b) => {
-      const nameA = this.normalizeStr(a.properties.name);
-      const nameB = this.normalizeStr(b.properties.name);
+      const nameA = normalizeStr(a.properties.name);
+      const nameB = normalizeStr(b.properties.name);
       const startsA = nameA.startsWith(normalizedQuery);
       const startsB = nameB.startsWith(normalizedQuery);
 
