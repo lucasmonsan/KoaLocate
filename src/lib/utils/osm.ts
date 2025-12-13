@@ -1,7 +1,9 @@
-export const getPlaceLabel = (result: any): string => {
+import type { OSMProperties, PlaceType, PlaceKey } from '$lib/types/osm.types';
+
+export const getPlaceLabel = (result: OSMProperties): string => {
   const { osm_key, osm_value } = result;
 
-  const map: Record<string, string> = {
+  const map: Record<PlaceKey, string> = {
     'place:city': 'Cidade',
     'place:town': 'Município',
     'place:village': 'Vila',
@@ -105,12 +107,12 @@ export const getPlaceLabel = (result: any): string => {
     'office:government': 'Órgão Público'
   };
 
-  const key = `${osm_key}:${osm_value}`;
+  const key = `${osm_key}:${osm_value}` as PlaceKey;
 
   return map[key] || osm_value.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase());
 };
 
-export const getPlaceType = (result: any): 'area' | 'point' => {
+export const getPlaceType = (result: OSMProperties): PlaceType => {
   const areas = ['city', 'town', 'village', 'suburb', 'neighbourhood', 'park', 'administrative', 'residential', 'industrial', 'commercial'];
 
   if (areas.includes(result.osm_value) || result.osm_key === 'landuse' || result.osm_key === 'boundary') return 'area';

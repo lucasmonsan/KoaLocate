@@ -1,12 +1,15 @@
+import type { LeafletMap, LeafletMarker, LeafletLibrary } from '$lib/types/leaflet.types';
+import type { OSMFeature } from '$lib/types/osm.types';
 import { getPlaceType } from '$lib/utils/osm';
+import { MAP_CONFIG } from '$lib/constants/config';
 import '$lib/styles/pins.css';
 
 class MapState {
-  private map: any = $state(null);
-  private L: any = null;
-  private currentLayer: any = null;
+  private map: LeafletMap | null = $state(null);
+  private L: LeafletLibrary | null = null;
+  private currentLayer: LeafletMarker | null = null;
 
-  setMap(mapInstance: any, leafletLibrary: any) {
+  setMap(mapInstance: LeafletMap | null, leafletLibrary: LeafletLibrary | null) {
     this.map = mapInstance;
     this.L = leafletLibrary;
   }
@@ -23,7 +26,7 @@ class MapState {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          this.map.flyTo([latitude, longitude], 15);
+          this.map!.flyTo([latitude, longitude], MAP_CONFIG.SEARCH_ZOOM);
         },
         (error) => {
           console.error(error);
@@ -32,7 +35,7 @@ class MapState {
     }
   }
 
-  selectLocation(feature: any) {
+  selectLocation(feature: OSMFeature) {
     if (!this.map || !this.L) return;
 
     const { geometry, properties } = feature;
@@ -47,8 +50,8 @@ class MapState {
     const icon = this.L.divIcon({
       className: 'custom-pin',
       html: `<div class="${cssClass}"></div>`,
-      iconSize: [16, 16],
-      iconAnchor: [8, 8]
+      iconSize: [MAP_CONFIG.MARKER_SIZE, MAP_CONFIG.MARKER_SIZE],
+      iconAnchor: [MAP_CONFIG.MARKER_SIZE / 2, MAP_CONFIG.MARKER_SIZE / 2]
     });
 
     this.currentLayer = this.L.marker([lat, lng], { icon }).addTo(this.map);
@@ -59,12 +62,12 @@ class MapState {
         [minLat, minLng],
         [maxLat, maxLng]
       ], {
-        padding: [50, 50],
-        maxZoom: 16,
+        padding: [MAP_CONFIG.FIT_BOUNDS_PADDING, MAP_CONFIG.FIT_BOUNDS_PADDING],
+        maxZoom: MAP_CONFIG.FIT_BOUNDS_MAX_ZOOM,
         animate: true
       });
     } else {
-      this.map.flyTo([lat, lng], 16, {
+      this.map.flyTo([lat, lng], MAP_CONFIG.SEARCH_ZOOM, {
         animate: true,
         duration: 1.5
       });
