@@ -8,20 +8,28 @@
 	import GPSIcon from '$lib/icons/GPSIcon.svelte';
 	import ProfileIcon from '$lib/icons/ProfileIcon.svelte';
 	import { i18n } from '$lib/i18n/index.svelte';
+	import ProfileMenu from '../profile/ProfileMenu.svelte';
 
 	let showHints = $derived(searchState.focused && searchState.results.length === 0 && !searchState.hasSearched);
 	let showResults = $derived(searchState.results.length > 0 || searchState.hasSearched);
+	let isMenuOpen = $state(false);
+
+	$effect(() => {
+		console.log('isMenuOpen:', isMenuOpen); // ← Adicione isso
+	});
 </script>
 
 <footer>
-	{#if showResults}
+	{#if isMenuOpen}
+		<ProfileMenu isOpen={isMenuOpen} onClose={() => (isMenuOpen = false)} />
+	{:else if showResults}
 		<SearchResults />
 	{:else if showHints}
 		<SearchHints />
 	{/if}
 
 	<nav>
-		<Button variant="icon" border="out" aria-label={i18n.t.buttons.profile}>
+		<Button variant="icon" border="out" onclick={() => (isMenuOpen = !isMenuOpen)} aria-label={i18n.t.buttons.profile}>
 			<ProfileIcon />
 		</Button>
 		<SearchBar />

@@ -4,6 +4,6 @@ export interface Toast {
   id: string;
   message: string;
   type: ToastType;
-  duration: number | null; // null = persist (não auto-dismiss)
+  duration: number | null;
   timestamp: number;
 }

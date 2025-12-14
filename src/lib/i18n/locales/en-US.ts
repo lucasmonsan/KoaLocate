@@ -25,6 +25,12 @@ export const enUS: I18nDictionary = {
     locationUnavailable: 'Location unavailable.',
     locationTimeout: 'Location request timed out.'
   },
+  success: {
+    locationFound: 'Location found!'
+  },
+  toast: {
+    close: 'Close notification'
+  },
   places: {
     'place:city': 'City',
     'place:town': 'Town',

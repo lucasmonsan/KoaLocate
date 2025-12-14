@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Toast as ToastType } from '$lib/types/toast.types';
 	import { fly } from 'svelte/transition';
+	import { i18n } from '$lib/i18n/index.svelte';
 	import CrossIcon from '$lib/icons/CrossIcon.svelte';
 
 	interface Props {
@@ -10,6 +11,7 @@
 
 	let { toast, onDismiss }: Props = $props();
 
+	// Ícones para cada tipo
 	const icons = {
 		success: '✅',
 		error: '❌',
@@ -21,7 +23,7 @@
 <div class="toast {toast.type}" role="alert" aria-live="polite" in:fly={{ y: -20, duration: 300 }} out:fly={{ y: -20, duration: 200 }}>
 	<span class="icon">{icons[toast.type]}</span>
 	<p>{toast.message}</p>
-	<button class="close" onclick={() => onDismiss(toast.id)} aria-label="Fechar notificação">
+	<button class="close" onclick={() => onDismiss(toast.id)} aria-label={i18n.t.toast.close}>
 		<CrossIcon />
 	</button>
 </div>

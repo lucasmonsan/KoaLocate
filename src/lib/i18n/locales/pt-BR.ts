@@ -25,6 +25,12 @@ export const ptBR: I18nDictionary = {
     locationUnavailable: 'Localização indisponível.',
     locationTimeout: 'Tempo esgotado ao buscar localização.'
   },
+  success: {
+    locationFound: 'Localização encontrada!'
+  },
+  toast: {
+    close: 'Fechar notificação'
+  },
   places: {
     'place:city': 'Cidade',
     'place:town': 'Município',

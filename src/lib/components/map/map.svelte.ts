@@ -29,14 +29,9 @@ class MapState {
         (position) => {
           const { latitude, longitude } = position.coords;
           this.map!.flyTo([latitude, longitude], MAP_CONFIG.SEARCH_ZOOM);
-          toast.success('Localização encontrada!');
+          toast.success(i18n.t.success.locationFound);
         },
         (error) => {
-          // GeolocationPositionError codes:
-          // 1 = PERMISSION_DENIED
-          // 2 = POSITION_UNAVAILABLE
-          // 3 = TIMEOUT
-
           if (error.code === 1) {
             toast.error(i18n.t.errors.locationDenied);
           } else if (error.code === 2) {
@@ -49,7 +44,7 @@ class MapState {
         }
       );
     } else {
-      toast.error('Geolocalização não suportada pelo navegador.');
+      toast.error(i18n.t.errors.locationUnavailable);
     }
   }
 

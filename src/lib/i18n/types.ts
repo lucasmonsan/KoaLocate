@@ -19,6 +19,12 @@ export interface I18nDictionary {
     locationUnavailable: string;
     locationTimeout: string;
   };
+  success: {
+    locationFound: string;
+  };
+  toast: {
+    close: string;
+  };
   places: {
     [key: string]: string;
   };
