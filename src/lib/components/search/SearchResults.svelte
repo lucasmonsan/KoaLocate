@@ -54,13 +54,14 @@
 			background: var(--surface);
 			border-radius: var(--radius-out);
 			padding: var(--xxs);
-			margin-bottom: var(--xxs);
+			scrollbar-width: thin;
+			scrollbar-color: var(--border-color) transparent;
 
 			&::-webkit-scrollbar {
 				width: 4px;
 			}
 			&::-webkit-scrollbar-thumb {
-				background: var(--border);
+				background: var(--border-color);
 				border-radius: 4px;
 			}
 		}
@@ -83,7 +84,7 @@
 	}
 
 	li {
-		border-bottom: 1px solid var(--border);
+		border-bottom: 1px solid var(--border-color);
 
 		&:last-child {
 			border-bottom: none;

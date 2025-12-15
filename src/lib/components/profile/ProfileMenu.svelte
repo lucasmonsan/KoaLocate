@@ -2,6 +2,7 @@
 	import { slide } from 'svelte/transition';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { themeState } from '$lib/stores/theme.svelte';
+	import { authState } from '$lib/stores/auth.svelte';
 	import type { Locale } from '$lib/i18n/types';
 
 	interface Props {
@@ -13,7 +14,6 @@
 
 	let themeExpanded = $state(false);
 	let languageExpanded = $state(false);
-	let isAuthenticated = $state(false);
 
 	const themes = [
 		{ value: 'light', icon: '☀️' },
@@ -129,14 +129,19 @@
 		<div class="separator"></div>
 
 		<section class="action">
-			{#if isAuthenticated}
-				<button class="logout" onclick={() => console.log('logout')}>
+			{#if authState.user}
+				<div class="user-info">
+					<small>{authState.user.email}</small>
+				</div>
+				<button class="logout" onclick={() => authState.signOut()}>
 					🚪 {i18n.t.profile.logout}
 				</button>
 			{:else}
-				<button class="login" onclick={() => console.log('login')}>
-					🔑 {i18n.t.profile.login}
-				</button>
+				<a href="/login" class="login-link">
+					<button class="login">
+						🔑 {i18n.t.profile.login}
+					</button>
+				</a>
 			{/if}
 		</section>
 	</div>
@@ -228,7 +233,7 @@
 
 	.separator {
 		height: 1px;
-		background: var(--border);
+		background: var(--border-color);
 	}
 
 	.links {
@@ -252,6 +257,10 @@
 
 	.action {
 		margin: 0;
+	}
+
+	.login-link {
+		text-decoration: none;
 	}
 
 	.login,
@@ -282,5 +291,13 @@
 		&:hover {
 			background: var(--bg);
 		}
+	}
+
+	.user-info {
+		padding: 0 var(--xs);
+		margin-bottom: var(--xxs);
+		text-align: center;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 </style>

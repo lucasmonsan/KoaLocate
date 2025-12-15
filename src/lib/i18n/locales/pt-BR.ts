@@ -1,5 +1,3 @@
-// $lib/i18n/locales/pt-BR.ts
-
 import type { I18nDictionary } from '../types';
 
 export const ptBR: I18nDictionary = {
@@ -37,6 +35,24 @@ export const ptBR: I18nDictionary = {
     login: 'Entrar',
     logout: 'Sair'
   },
+  auth: {
+    loginTitle: 'Bem-vindo de volta',
+    signupTitle: 'Crie sua conta',
+    emailLabel: 'E-mail',
+    passwordLabel: 'Senha',
+    nameLabel: 'Nome completo',
+    loginButton: 'Entrar',
+    signupButton: 'Cadastrar',
+    noAccount: 'Não tem uma conta? Cadastre-se',
+    hasAccount: 'Já tem uma conta? Entre',
+    googleLogin: 'Entrar com Google',
+    or: 'ou',
+    errors: {
+      invalidEmail: 'E-mail inválido.',
+      passwordShort: 'A senha deve ter pelo menos 6 caracteres.',
+      generic: 'Ocorreu um erro. Verifique seus dados.'
+    }
+  },
   errors: {
     searchFailed: 'Não foi possível buscar. Tente novamente.',
     locationDenied: 'Permissão de localização negada.',
@@ -57,7 +73,6 @@ export const ptBR: I18nDictionary = {
     'place:neighbourhood': 'Bairro',
     'place:locality': 'Localidade',
     'place:hamlet': 'Povoado',
-
     'highway:residential': 'Rua',
     'highway:primary': 'Avenida',
     'highway:secondary': 'Rua Principal',
@@ -69,7 +84,6 @@ export const ptBR: I18nDictionary = {
     'highway:track': 'Estrada de Terra',
     'highway:path': 'Caminho',
     'highway:footway': 'Calçada',
-
     'amenity:pharmacy': 'Farmácia',
     'amenity:hospital': 'Hospital',
     'amenity:clinic': 'Clínica',
@@ -97,7 +111,6 @@ export const ptBR: I18nDictionary = {
     'amenity:townhall': 'Prefeitura',
     'amenity:courthouse': 'Tribunal',
     'amenity:arts_centre': 'Centro Cultural',
-
     'shop:supermarket': 'Supermercado',
     'shop:bakery': 'Padaria',
     'shop:clothes': 'Loja de Roupas',
@@ -113,7 +126,6 @@ export const ptBR: I18nDictionary = {
     'shop:butcher': 'Açougue',
     'shop:optician': 'Ótica',
     'shop:books': 'Livraria',
-
     'tourism:museum': 'Museu',
     'tourism:hotel': 'Hotel',
     'tourism:attraction': 'Ponto Turístico',
@@ -131,14 +143,12 @@ export const ptBR: I18nDictionary = {
     'historic:castle': 'Castelo',
     'historic:ruins': 'Ruínas',
     'historic:building': 'Edifício Histórico',
-
     'railway:station': 'Estação de Trem',
     'railway:subway_entrance': 'Metrô',
     'public_transport:platform': 'Ponto de Embarque',
     'public_transport:stop_position': 'Ponto de Ônibus',
     'aeroway:aerodrome': 'Aeroporto',
     'aeroway:terminal': 'Terminal de Aeroporto',
-
     'man_made:tower': 'Torre',
     'building:apartments': 'Condomínio',
     'building:residential': 'Residencial',

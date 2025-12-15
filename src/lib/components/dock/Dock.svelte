@@ -26,11 +26,11 @@
 	{/if}
 
 	<nav>
-		<Button variant="icon" border="out" onclick={() => (isMenuOpen = !isMenuOpen)} aria-label={i18n.t.buttons.profile}>
+		<Button variant="icon" radius="out" onclick={() => (isMenuOpen = !isMenuOpen)} aria-label={i18n.t.buttons.profile}>
 			<ProfileIcon />
 		</Button>
 		<SearchBar />
-		<Button variant="icon" border="out" onclick={() => mapState.locateUser()} aria-label={i18n.t.buttons.locate}>
+		<Button variant="icon" radius="out" onclick={() => mapState.locateUser()} aria-label={i18n.t.buttons.locate}>
 			<GPSIcon />
 		</Button>
 	</nav>

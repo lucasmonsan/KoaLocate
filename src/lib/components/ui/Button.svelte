@@ -4,14 +4,14 @@
 
 	interface Props extends HTMLButtonAttributes {
 		children: Snippet;
-		border?: 'in' | 'out';
+		radius?: 'in' | 'out';
 		variant?: 'ghost' | 'outline' | 'icon' | '';
 	}
 
-	let { children, variant = '', border = 'in', ...rest }: Props = $props();
+	let { children, variant = '', radius = 'in', ...rest }: Props = $props();
 </script>
 
-<button class="{variant} {border}" {...rest}>
+<button class="{variant} {radius}" {...rest}>
 	{@render children()}
 </button>
 
@@ -21,11 +21,11 @@
 		display: flex;
 		min-width: var(--xl, 1.5rem);
 		min-height: var(--xl, 1.5rem);
-		padding: var(--xxs, 0.4rem);
+		padding: var(--xs, 0.4rem);
+		font-weight: 700;
 		box-shadow: var(--shadow-md, 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -1px rgb(0 0 0 / 0.06));
-		background: var(--surface, #ffffff);
-		color: var(--text-primary, #101214);
-
+		background: var(--surface);
+		color: var(--text-primary);
 		user-select: none;
 		-moz-user-select: none;
 		-webkit-tap-highlight-color: transparent;

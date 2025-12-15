@@ -4,7 +4,7 @@
 
 	--bg: #f8f9fa;
 	--surface: #ffffff;
-	--border: #dee2e6;
+	--border-color: #dee2e6;
 
 	--text-primary: #101214;
 	--text-secondary: #6c757d;
@@ -21,7 +21,7 @@
 
 		--bg: #1a1d21;
 		--surface: #24282e;
-		--border: #40464f;
+		--border-color: #40464f;
 
 		--text-primary: #f8f9fa;
 		--text-secondary: #adb5bd;
@@ -34,7 +34,7 @@
 
 	--bg: #1a1d21;
 	--surface: #24282e;
-	--border: #40464f;
+	--border-color: #40464f;
 
 	--text-primary: #f8f9fa;
 	--text-secondary: #adb5bd;

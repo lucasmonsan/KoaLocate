@@ -29,6 +29,24 @@ export interface I18nDictionary {
     login: string;
     logout: string;
   };
+  auth: {
+    loginTitle: string;
+    signupTitle: string;
+    emailLabel: string;
+    passwordLabel: string;
+    nameLabel: string;
+    loginButton: string;
+    signupButton: string;
+    noAccount: string;
+    hasAccount: string;
+    googleLogin: string;
+    or: string;
+    errors: {
+      invalidEmail: string;
+      passwordShort: string;
+      generic: string;
+    };
+  };
   errors: {
     searchFailed: string;
     locationDenied: string;

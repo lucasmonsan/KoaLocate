@@ -1,5 +1,3 @@
-// $lib/i18n/locales/en-US.ts
-
 import type { I18nDictionary } from '../types';
 
 export const enUS: I18nDictionary = {
@@ -37,6 +35,24 @@ export const enUS: I18nDictionary = {
     login: 'Sign In',
     logout: 'Sign Out'
   },
+  auth: {
+    loginTitle: 'Welcome Back',
+    signupTitle: 'Create Account',
+    emailLabel: 'Email',
+    passwordLabel: 'Password',
+    nameLabel: 'Full Name',
+    loginButton: 'Sign In',
+    signupButton: 'Sign Up',
+    noAccount: 'No account? Sign up',
+    hasAccount: 'Already have an account? Sign in',
+    googleLogin: 'Sign in with Google',
+    or: 'or',
+    errors: {
+      invalidEmail: 'Invalid email.',
+      passwordShort: 'Password must be at least 6 characters.',
+      generic: 'An error occurred. Please check your inputs.'
+    }
+  },
   errors: {
     searchFailed: 'Unable to search. Please try again.',
     locationDenied: 'Location permission denied.',
@@ -57,7 +73,6 @@ export const enUS: I18nDictionary = {
     'place:neighbourhood': 'Neighborhood',
     'place:locality': 'Locality',
     'place:hamlet': 'Hamlet',
-
     'highway:residential': 'Street',
     'highway:primary': 'Avenue',
     'highway:secondary': 'Main Street',
@@ -69,7 +84,6 @@ export const enUS: I18nDictionary = {
     'highway:track': 'Dirt Road',
     'highway:path': 'Path',
     'highway:footway': 'Sidewalk',
-
     'amenity:pharmacy': 'Pharmacy',
     'amenity:hospital': 'Hospital',
     'amenity:clinic': 'Clinic',
@@ -97,7 +111,6 @@ export const enUS: I18nDictionary = {
     'amenity:townhall': 'Town Hall',
     'amenity:courthouse': 'Courthouse',
     'amenity:arts_centre': 'Arts Center',
-
     'shop:supermarket': 'Supermarket',
     'shop:bakery': 'Bakery',
     'shop:clothes': 'Clothing Store',
@@ -113,7 +126,6 @@ export const enUS: I18nDictionary = {
     'shop:butcher': 'Butcher',
     'shop:optician': 'Optician',
     'shop:books': 'Bookstore',
-
     'tourism:museum': 'Museum',
     'tourism:hotel': 'Hotel',
     'tourism:attraction': 'Tourist Attraction',
@@ -131,14 +143,12 @@ export const enUS: I18nDictionary = {
     'historic:castle': 'Castle',
     'historic:ruins': 'Ruins',
     'historic:building': 'Historic Building',
-
     'railway:station': 'Train Station',
     'railway:subway_entrance': 'Subway',
     'public_transport:platform': 'Platform',
     'public_transport:stop_position': 'Bus Stop',
     'aeroway:aerodrome': 'Airport',
     'aeroway:terminal': 'Airport Terminal',
-
     'man_made:tower': 'Tower',
     'building:apartments': 'Apartments',
     'building:residential': 'Residential',

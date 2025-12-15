@@ -32,7 +32,7 @@ class I18n {
   }
 
   get t(): I18nDictionary {
-    return locales[this.currentLocale];
+    return locales[this.currentLocale] || locales['pt-BR'] || ptBR;
   }
 }
 

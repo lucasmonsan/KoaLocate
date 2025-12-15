@@ -6,6 +6,7 @@
 	import Map from '$lib/components/map/Map.svelte';
 	import ToastContainer from '$lib/components/toast/ToastContainer.svelte';
 	import '../app.css';
+	import Main from '$lib/components/layout/Main.svelte';
 
 	let { children } = $props();
 
@@ -19,7 +20,10 @@
 
 <ToastContainer />
 <Map />
-{@render children()}
+
+<Main>
+	{@render children()}
+</Main>
 
 {#if showDock}
 	<Dock />

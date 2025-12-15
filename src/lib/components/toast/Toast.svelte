@@ -19,7 +19,7 @@
 	};
 </script>
 
-<div class="toast {toast.type}" role="alert" aria-live="polite" in:fly={{ y: -20, duration: 300 }} out:fly={{ y: -20, duration: 200 }}>
+<div class="toast {toast.type}" role="status" aria-live="polite" in:fly={{ y: -20, duration: 300 }} out:fly={{ y: -20, duration: 200 }}>
 	<span class="icon">{icons[toast.type]}</span>
 	<p>{toast.message}</p>
 	<button class="close" onclick={() => onDismiss(toast.id)} aria-label={i18n.t.toast.close}>
@@ -36,26 +36,29 @@
 		max-width: 500px;
 		padding: var(--xs) var(--sm);
 		border-radius: var(--radius-in);
-		box-shadow: var(--shadow-lg);
 		background: var(--surface);
-		border: 2px solid;
-		animation: slideIn 0.3s ease-out;
+		box-shadow: var(--shadow-lg);
+		border: 2px solid transparent;
+	}
 
-		&.success {
-			border-color: var(--success);
-		}
+	.toast.success {
+		border-color: var(--success);
+		background: color-mix(in srgb, var(--success) 10%, var(--surface));
+	}
 
-		&.error {
-			border-color: var(--error);
-		}
+	.toast.error {
+		border-color: var(--error);
+		background: color-mix(in srgb, var(--error) 10%, var(--surface));
+	}
 
-		&.info {
-			border-color: var(--brand-primary);
-		}
+	.toast.warning {
+		border-color: var(--warning);
+		background: color-mix(in srgb, var(--warning) 10%, var(--surface));
+	}
 
-		&.warning {
-			border-color: var(--warning);
-		}
+	.toast.info {
+		border-color: var(--brand-primary);
+		background: color-mix(in srgb, var(--brand-primary) 10%, var(--surface));
 	}
 
 	.icon {
@@ -69,10 +72,10 @@
 		font-size: var(--sm);
 		font-weight: 600;
 		color: var(--text-primary);
-		line-height: 1.4;
 	}
 
 	.close {
+		position: relative;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -83,24 +86,17 @@
 		border: none;
 		border-radius: var(--radius-in);
 		cursor: pointer;
+		flex-shrink: 0;
 		color: var(--text-secondary);
 		transition: all var(--fast);
-		flex-shrink: 0;
-
-		&:hover {
-			background: var(--bg);
-			color: var(--text-primary);
-		}
 	}
 
-	@keyframes slideIn {
-		from {
-			transform: translateY(-100%);
-			opacity: 0;
-		}
-		to {
-			transform: translateY(0);
-			opacity: 1;
-		}
+	.close:hover {
+		background: var(--bg);
+		color: var(--text-primary);
+	}
+
+	.close:active {
+		transform: scale(0.95);
 	}
 </style>
