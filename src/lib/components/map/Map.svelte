@@ -1,36 +1,37 @@
 <script lang="ts">
 	import 'leaflet/dist/leaflet.css';
 	import { mapState } from './map.svelte';
+	import { themeState } from '$lib/stores/theme.svelte';
 	import { MAP_CONFIG } from '$lib/constants/config';
 
 	let mapElement: HTMLElement;
 	let currentTileLayer: any;
 
 	function getTileUrl(theme: string): string {
+		if (theme === 'auto') {
+			const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+			return prefersDark ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png' : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png';
+		}
+
 		if (theme === 'dark') {
 			return 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png';
 		}
 		return 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png';
 	}
 
-	function updateMapTheme() {
-		const theme = document.documentElement.getAttribute('data-theme');
-		const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-		const effectiveTheme = theme || (prefersDark ? 'dark' : 'light');
+	$effect(() => {
+		const theme = themeState.current;
+		const map = mapState.getMap();
+		const L = (window as any).L;
 
-		if (currentTileLayer) {
-			const map = mapState.getMap();
-			if (map) {
-				map.removeLayer(currentTileLayer);
-
-				const L = (window as any).L;
-				currentTileLayer = L.tileLayer(getTileUrl(effectiveTheme), {
-					attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-					maxZoom: 20
-				}).addTo(map);
-			}
+		if (map && L && currentTileLayer) {
+			map.removeLayer(currentTileLayer);
+			currentTileLayer = L.tileLayer(getTileUrl(theme), {
+				attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+				maxZoom: 20
+			}).addTo(map);
 		}
-	}
+	});
 
 	$effect(() => {
 		let map: any;
@@ -49,16 +50,12 @@
 				shadowUrl: ''
 			});
 
-			const theme = document.documentElement.getAttribute('data-theme');
-			const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-			const effectiveTheme = theme || (prefersDark ? 'dark' : 'light');
-
 			map = L.map(mapElement, {
 				zoomControl: false,
 				attributionControl: false
 			}).setView(MAP_CONFIG.DEFAULT_CENTER, MAP_CONFIG.DEFAULT_ZOOM);
 
-			currentTileLayer = L.tileLayer(getTileUrl(effectiveTheme), {
+			currentTileLayer = L.tileLayer(getTileUrl(themeState.current), {
 				attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
 				maxZoom: 20
 			}).addTo(map);
@@ -67,14 +64,6 @@
 
 			resizeObserver = new ResizeObserver(() => map.invalidateSize());
 			resizeObserver.observe(mapElement);
-
-			const observer = new MutationObserver(updateMapTheme);
-			observer.observe(document.documentElement, {
-				attributes: true,
-				attributeFilter: ['data-theme']
-			});
-
-			window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateMapTheme);
 		};
 
 		initMap();

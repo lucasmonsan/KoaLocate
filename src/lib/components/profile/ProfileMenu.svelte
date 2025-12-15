@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
 	import { i18n } from '$lib/i18n/index.svelte';
+	import { themeState } from '$lib/stores/theme.svelte';
 	import type { Locale } from '$lib/i18n/types';
 
 	interface Props {
@@ -12,17 +13,7 @@
 
 	let themeExpanded = $state(false);
 	let languageExpanded = $state(false);
-	let currentTheme = $state<string>('auto');
 	let isAuthenticated = $state(false);
-
-	$effect(() => {
-		const savedTheme = localStorage.getItem('theme') || 'auto';
-		currentTheme = savedTheme;
-		applyTheme(savedTheme);
-
-		const savedLocale = (localStorage.getItem('locale') as Locale) || 'pt-BR';
-		i18n.setLocale(savedLocale);
-	});
 
 	const themes = [
 		{ value: 'light', icon: '☀️' },
@@ -45,26 +36,13 @@
 		if (languageExpanded) themeExpanded = false;
 	}
 
-	function setTheme(theme: string) {
-		currentTheme = theme;
-		localStorage.setItem('theme', theme);
-		applyTheme(theme);
+	function handleThemeSelect(value: string) {
+		themeState.set(value);
 		themeExpanded = false;
 	}
 
-	function applyTheme(theme: string) {
-		if (theme === 'light') {
-			document.documentElement.setAttribute('data-theme', 'light');
-		} else if (theme === 'dark') {
-			document.documentElement.setAttribute('data-theme', 'dark');
-		} else {
-			document.documentElement.removeAttribute('data-theme');
-		}
-	}
-
-	function setLanguage(locale: Locale) {
-		i18n.setLocale(locale);
-		localStorage.setItem('locale', locale);
+	function handleLanguageSelect(value: Locale) {
+		i18n.setLocale(value);
 		languageExpanded = false;
 	}
 
@@ -91,7 +69,6 @@
 			setTimeout(() => {
 				document.addEventListener('click', handleClickOutside);
 			}, 10);
-
 			return () => document.removeEventListener('click', handleClickOutside);
 		}
 	});
@@ -102,7 +79,7 @@
 		<section>
 			<button class="collapsible" onclick={toggleTheme}>
 				<span>
-					🌙 {i18n.t.profile.theme.title}: <strong>{getThemeLabel(currentTheme)}</strong>
+					🌙 {i18n.t.profile.theme.title}: <strong>{getThemeLabel(themeState.current)}</strong>
 				</span>
 				<span class="arrow" class:expanded={themeExpanded}>▼</span>
 			</button>
@@ -110,7 +87,7 @@
 			{#if themeExpanded}
 				<div class="options" transition:slide={{ axis: 'y', duration: 200 }}>
 					{#each themes as theme}
-						<button class="option" class:active={currentTheme === theme.value} onclick={() => setTheme(theme.value)}>
+						<button class="option" class:active={themeState.current === theme.value} onclick={() => handleThemeSelect(theme.value)}>
 							{theme.icon}
 							{getThemeLabel(theme.value)}
 						</button>
@@ -130,7 +107,7 @@
 			{#if languageExpanded}
 				<div class="options" transition:slide={{ axis: 'y', duration: 200 }}>
 					{#each languages as lang}
-						<button class="option" class:active={i18n.locale === lang.value} onclick={() => setLanguage(lang.value)}>
+						<button class="option" class:active={i18n.locale === lang.value} onclick={() => handleLanguageSelect(lang.value)}>
 							{lang.flag}
 							{lang.label}
 						</button>

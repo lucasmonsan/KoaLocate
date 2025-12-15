@@ -14,10 +14,6 @@
 	let showHints = $derived(searchState.focused && searchState.results.length === 0 && !searchState.hasSearched);
 	let showResults = $derived(searchState.results.length > 0 || searchState.hasSearched);
 	let isMenuOpen = $state(false);
-
-	$effect(() => {
-		console.log('isMenuOpen:', isMenuOpen); // ← Adicione isso
-	});
 </script>
 
 <footer transition:fade>
