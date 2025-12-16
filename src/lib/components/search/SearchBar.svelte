@@ -52,6 +52,10 @@
 	}}
 	data-loading={searchState.loading}
 >
+	{#if searchState.loading}
+		<div class="progress-bar"></div>
+	{/if}
+
 	<input
 		bind:this={inputElement}
 		type="text"
@@ -89,6 +93,7 @@
 
 <style>
 	form {
+		position: relative;
 		overflow: hidden;
 		display: flex;
 		flex-grow: 1;
@@ -104,13 +109,34 @@
 		}
 
 		&[data-loading='true'] {
-			opacity: 0.8;
-			pointer-events: none;
+			box-shadow:
+				0 0 0 2px var(--brand-primary),
+				var(--shadow-lg);
 		}
+	}
 
-		&[data-loading='true'] input {
-			border-color: var(--brand-primary);
-			background: color-mix(in srgb, var(--brand-primary) 5%, var(--bg));
+	.progress-bar {
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 3px;
+		background: var(--brand-primary);
+		animation: progress 1.5s ease-in-out infinite;
+		border-radius: var(--radius-out) var(--radius-out) 0 0;
+	}
+
+	@keyframes progress {
+		0% {
+			width: 0%;
+			left: 0;
+		}
+		50% {
+			width: 70%;
+			left: 15%;
+		}
+		100% {
+			width: 0%;
+			left: 100%;
 		}
 	}
 
@@ -126,5 +152,6 @@
 
 	input:disabled {
 		cursor: wait;
+		opacity: 0.7;
 	}
 </style>
