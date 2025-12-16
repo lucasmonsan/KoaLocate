@@ -1,6 +1,9 @@
 import { createServerClient } from '@supabase/ssr';
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
-import type { Handle } from '@sveltejs/kit';
+import { redirect, type Handle } from '@sveltejs/kit';
+
+const PUBLIC_ROUTES = ['/auth/callback'];
+const AUTH_URL = 'https://monsan.duckdns.org';
 
 export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.supabase = createServerClient(
@@ -38,6 +41,15 @@ export const handle: Handle = async ({ event, resolve }) => {
 		} = await event.locals.supabase.auth.getSession();
 		return session;
 	};
+
+	const session = await event.locals.getSession();
+	const isPublicRoute = PUBLIC_ROUTES.some(route => event.url.pathname.startsWith(route));
+
+	// Redireciona para Monsan Auth se não estiver autenticado
+	if (!session && !isPublicRoute) {
+		const redirectUrl = `${AUTH_URL}/login?redirect=${encodeURIComponent(event.url.href)}`;
+		throw redirect(307, redirectUrl);
+	}
 
 	return resolve(event, {
 		filterSerializedResponseHeaders(name) {
