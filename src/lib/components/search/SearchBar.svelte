@@ -55,6 +55,7 @@
 	<input
 		bind:this={inputElement}
 		type="text"
+		role="combobox"
 		placeholder={i18n.t.search.placeholder}
 		bind:value={searchState.query}
 		oninput={(e) => searchState.setQuery(e.currentTarget.value)}
@@ -65,6 +66,8 @@
 		aria-label={i18n.t.buttons.search}
 		aria-autocomplete="list"
 		aria-controls="search-results"
+		aria-expanded={searchState.focused && (searchState.results.length > 0 || searchState.hasSearched)}
+		aria-activedescendant={searchState.focusedIndex >= 0 ? `result-${searchState.focusedIndex}` : undefined}
 	/>
 
 	<Button

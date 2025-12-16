@@ -1,10 +1,9 @@
 <script lang="ts">
-	import { slide } from 'svelte/transition';
+	import { slideUp } from '$lib/utils/transitions';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { themeState } from '$lib/stores/theme.svelte';
 	import { authState } from '$lib/stores/auth.svelte';
 	import type { Locale } from '$lib/i18n/types';
-	import { slideUp } from '$lib/utils/transitions';
 
 	interface Props {
 		isOpen: boolean;
@@ -65,12 +64,22 @@
 		}
 	}
 
+	function handleEscape(e: KeyboardEvent) {
+		if (e.key === 'Escape') {
+			onClose();
+		}
+	}
+
 	$effect(() => {
 		if (isOpen) {
 			setTimeout(() => {
 				document.addEventListener('click', handleClickOutside);
+				document.addEventListener('keydown', handleEscape);
 			}, 10);
-			return () => document.removeEventListener('click', handleClickOutside);
+			return () => {
+				document.removeEventListener('click', handleClickOutside);
+				document.removeEventListener('keydown', handleEscape);
+			};
 		}
 	});
 </script>
@@ -78,7 +87,7 @@
 {#if isOpen}
 	<div class="profile-menu shadow" transition:slideUp>
 		<section>
-			<button class="collapsible" onclick={toggleTheme}>
+			<button class="collapsible" onclick={toggleTheme} aria-expanded={themeExpanded}>
 				<span>
 					🌙 {i18n.t.profile.theme.title}: <strong>{getThemeLabel(themeState.current)}</strong>
 				</span>
@@ -86,7 +95,7 @@
 			</button>
 
 			{#if themeExpanded}
-				<div class="options" transition:slide={{ axis: 'y', duration: 200 }}>
+				<div class="options" transition:slideUp={{ duration: 200 }}>
 					{#each themes as theme}
 						<button class="option" class:active={themeState.current === theme.value} onclick={() => handleThemeSelect(theme.value)}>
 							{theme.icon}
@@ -98,7 +107,7 @@
 		</section>
 
 		<section>
-			<button class="collapsible" onclick={toggleLanguage}>
+			<button class="collapsible" onclick={toggleLanguage} aria-expanded={languageExpanded}>
 				<span>
 					🌐 {i18n.t.profile.language.title}: <strong>{getLanguageLabel(i18n.locale)}</strong>
 				</span>
@@ -106,7 +115,7 @@
 			</button>
 
 			{#if languageExpanded}
-				<div class="options" transition:slide={{ axis: 'y', duration: 200 }}>
+				<div class="options" transition:slideUp={{ duration: 200 }}>
 					{#each languages as lang}
 						<button class="option" class:active={i18n.locale === lang.value} onclick={() => handleLanguageSelect(lang.value)}>
 							{lang.flag}

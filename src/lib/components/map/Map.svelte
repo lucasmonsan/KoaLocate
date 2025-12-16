@@ -78,7 +78,7 @@
 	});
 </script>
 
-<div bind:this={mapElement}></div>
+<div bind:this={mapElement} role="region" aria-label="Mapa interativo"></div>
 
 <style>
 	div {
