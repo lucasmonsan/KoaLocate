@@ -12,7 +12,9 @@
 
 	let { children, data } = $props();
 
-	authState.init(data.supabase, data.session);
+	$effect(() => {
+		authState.init(data.supabase, data.session);
+	});
 
 	let showDock = $derived(page.url.pathname === '/');
 	let showOverlay = $derived(page.url.pathname !== '/');
