@@ -17,7 +17,13 @@ export const enUS: I18nDictionary = {
     clear: 'Clear',
     search: 'Search',
     locate: 'My location',
-    profile: 'Profile'
+    profile: 'Profile',
+    addPin: 'Add Pin',
+    save: 'Save',
+    cancel: 'Cancel',
+    delete: 'Delete',
+    edit: 'Edit',
+    upload: 'Upload Photo'
   },
   profile: {
     theme: {

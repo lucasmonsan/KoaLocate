@@ -17,7 +17,13 @@ export const ptBR: I18nDictionary = {
     clear: 'Limpar',
     search: 'Pesquisar',
     locate: 'Minha localização',
-    profile: 'Perfil'
+    profile: 'Perfil',
+    addPin: 'Adicionar Pin',
+    save: 'Salvar',
+    cancel: 'Cancelar',
+    delete: 'Deletar',
+    edit: 'Editar',
+    upload: 'Enviar Foto'
   },
   profile: {
     theme: {
