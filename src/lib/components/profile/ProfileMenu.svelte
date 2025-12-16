@@ -4,6 +4,7 @@
 	import { themeState } from '$lib/stores/theme.svelte';
 	import { authState } from '$lib/stores/auth.svelte';
 	import type { Locale } from '$lib/i18n/types';
+	import { slideUp } from '$lib/utils/transitions';
 
 	interface Props {
 		isOpen: boolean;
@@ -75,7 +76,7 @@
 </script>
 
 {#if isOpen}
-	<div class="profile-menu shadow" transition:slide={{ axis: 'y' }}>
+	<div class="profile-menu shadow" transition:slideUp>
 		<section>
 			<button class="collapsible" onclick={toggleTheme}>
 				<span>

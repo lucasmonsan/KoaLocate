@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { fade, slide } from 'svelte/transition';
+	import { slideUp } from '$lib/utils/transitions';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 </script>
 
-<div class="shadow" transition:fade={{ duration: 250 }}>
-	<div transition:slide={{ axis: 'y' }}>
+<div class="shadow" transition:slideUp>
+	<div>
 		<p>{i18n.t.search.hints.title}</p>
 		<ul>
 			{#each i18n.t.search.hints.items as hint}

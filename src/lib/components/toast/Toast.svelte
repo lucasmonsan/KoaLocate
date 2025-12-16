@@ -3,6 +3,7 @@
 	import { fly } from 'svelte/transition';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import CrossIcon from '$lib/icons/CrossIcon.svelte';
+	import { slideDown } from '$lib/utils/transitions';
 
 	interface Props {
 		toast: ToastType;
@@ -19,7 +20,7 @@
 	};
 </script>
 
-<div class="toast {toast.type}" role="status" aria-live="polite" in:fly={{ y: -20, duration: 300 }} out:fly={{ y: -20, duration: 200 }}>
+<div class="toast {toast.type}" role="status" aria-live="polite" transition:slideDown>
 	<span class="icon">{icons[toast.type]}</span>
 	<p>{toast.message}</p>
 	<button class="close" onclick={() => onDismiss(toast.id)} aria-label={i18n.t.toast.close}>

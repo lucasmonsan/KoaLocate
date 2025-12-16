@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { slide } from 'svelte/transition';
+	import { slideUp } from '$lib/utils/transitions';
 	import { searchState } from './search.svelte';
 	import { getPlaceLabel } from '$lib/utils/osm';
 	import { highlightMatch } from '$lib/utils/string';
@@ -16,7 +16,7 @@
 </script>
 
 {#if searchState.results.length > 0}
-	<div id="search-results" class="results-container shadow" transition:slide={{ axis: 'y' }}>
+	<div id="search-results" class="results-container shadow" transition:slideUp>
 		<ul role="listbox">
 			{#each searchState.results as result, index}
 				<li bind:this={listElements[index]} role="option" aria-selected={searchState.focusedIndex === index} class:focused={searchState.focusedIndex === index}>
@@ -37,7 +37,7 @@
 		</ul>
 	</div>
 {:else if searchState.hasSearched && searchState.results.length === 0 && !searchState.loading}
-	<div class="results-container shadow error" transition:slide={{ axis: 'y' }}>
+	<div class="results-container shadow error" transition:slideUp>
 		<p>{i18n.t.search.noResults} "<strong>{searchState.lastSearchedQuery}</strong>"</p>
 	</div>
 {/if}

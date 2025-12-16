@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { fade, fly } from 'svelte/transition';
+	import { slideUp } from '$lib/utils/transitions';
 	import { searchState } from '$lib/components/search/search.svelte';
 	import { mapState } from '$lib/components/map/map.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
@@ -16,7 +16,7 @@
 	let isMenuOpen = $state(false);
 </script>
 
-<footer transition:fade>
+<footer transition:slideUp={{ duration: 300 }}>
 	{#if isMenuOpen}
 		<ProfileMenu isOpen={isMenuOpen} onClose={() => (isMenuOpen = false)} />
 	{:else if showResults}
