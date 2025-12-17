@@ -4,6 +4,7 @@
 	import { PinsService } from '$lib/services/pins.service';
 	import { processImage } from '$lib/utils/imageCompression';
 	import { ProfanityFilter } from '$lib/utils/profanityFilter';
+	import { RateLimiter, RateLimitPresets } from '$lib/utils/rateLimit';
 	import { haptics } from '$lib/utils/haptics';
 	import { toast } from '$lib/components/toast/toast.svelte';
 	import { i18n } from '$lib/i18n/i18n.svelte';
@@ -33,6 +34,16 @@
 		if (photos.length + files.length > 3) {
 			toast.error('Máximo 3 fotos por avaliação');
 			return;
+		}
+
+		// Rate limiting para upload
+		if (authState.user) {
+			const rateLimitKey = `upload_${authState.user.id}`;
+			const canProceed = await RateLimiter.check(rateLimitKey, RateLimitPresets.PHOTO_UPLOAD);
+			if (!canProceed) {
+				if (input) input.value = '';
+				return;
+			}
 		}
 
 		uploading = true;
@@ -70,6 +81,11 @@
 			toast.error('Selecione uma avaliação');
 			return;
 		}
+
+		// Rate limiting
+		const rateLimitKey = `review_${authState.user.id}`;
+		const canProceed = await RateLimiter.check(rateLimitKey, RateLimitPresets.REVIEW_CREATION);
+		if (!canProceed) return;
 
 		// Validação de profanidade
 		if (comment.trim()) {
