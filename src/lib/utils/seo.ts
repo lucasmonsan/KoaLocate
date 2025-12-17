@@ -12,7 +12,7 @@ export function generateMetaTags(config: SEOConfig): string {
 	const baseUrl = 'https://map.monsan.duckdns.org';
 	const defaultImage = `${baseUrl}/og-image.png`;
 
-	const title = config.title || 'LocaList - Mapeamento Colaborativo';
+	const title = config.title || 'Monsan Map - Mapeamento Colaborativo';
 	const description =
 		config.description ||
 		'Descubra, avalie e compartilhe lugares incríveis. Sistema de mapeamento colaborativo com reviews, fotos e favoritos.';
@@ -34,7 +34,7 @@ export function generateMetaTags(config: SEOConfig): string {
 		<meta property="og:title" content="${title}" />
 		<meta property="og:description" content="${description}" />
 		<meta property="og:image" content="${image}" />
-		<meta property="og:site_name" content="LocaList" />
+		<meta property="og:site_name" content="Monsan Map" />
 		<meta property="og:locale" content="pt_BR" />
 		
 		<!-- Twitter -->
@@ -52,7 +52,7 @@ export function generateMetaTags(config: SEOConfig): string {
 }
 
 export const defaultSEO: SEOConfig = {
-	title: 'LocaList - Mapeamento Colaborativo',
+	title: 'Monsan Map - Mapeamento Colaborativo',
 	description:
 		'Descubra, avalie e compartilhe lugares incríveis. Sistema de mapeamento colaborativo com reviews, fotos e favoritos.',
 	keywords: [
@@ -71,8 +71,8 @@ export const defaultSEO: SEOConfig = {
 
 export function getSEOForPin(pinName: string, pinDescription?: string, pinImage?: string): SEOConfig {
 	return {
-		title: `${pinName} - LocaList`,
-		description: pinDescription || `Veja avaliações, fotos e informações sobre ${pinName} no LocaList`,
+		title: `${pinName} - Monsan Map`,
+		description: pinDescription || `Veja avaliações, fotos e informações sobre ${pinName} no Monsan Map`,
 		image: pinImage,
 		type: 'article'
 	};
@@ -80,8 +80,8 @@ export function getSEOForPin(pinName: string, pinDescription?: string, pinImage?
 
 export function getSEOForFavorites(userName?: string): SEOConfig {
 	return {
-		title: `Favoritos${userName ? ` de ${userName}` : ''} - LocaList`,
-		description: 'Meus lugares favoritos salvos no LocaList',
+		title: `Favoritos${userName ? ` de ${userName}` : ''} - Monsan Map`,
+		description: 'Meus lugares favoritos salvos no Monsan Map',
 		type: 'website'
 	};
 }

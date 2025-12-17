@@ -7,8 +7,9 @@
 	import SearchHints from '$lib/components/search/SearchHints.svelte';
 	import SearchResults from '$lib/components/search/SearchResults.svelte';
 	import SearchHistory from '$lib/components/search/SearchHistory.svelte';
-	import { Navigation, User } from 'lucide-svelte';
+	import { Locate, User } from 'lucide-svelte';
 	import { i18n } from '$lib/i18n/i18n.svelte';
+	import { authState } from '$lib/stores/auth.svelte';
 	import ProfileMenu from '../profile/ProfileMenu.svelte';
 
 	let showHistory = $derived(searchState.focused && searchState.query === '' && searchState.history.length > 0 && searchState.results.length === 0 && !searchState.hasSearched);
@@ -30,11 +31,15 @@
 
 	<nav>
 		<Button variant="icon" radius="out" onclick={() => (isMenuOpen = !isMenuOpen)} aria-label={i18n.t.buttons.profile}>
-			<User size={20} />
+			{#if authState.user?.user_metadata?.avatar_url}
+				<img src={authState.user.user_metadata.avatar_url} alt={authState.user.email || 'User'} class="user-avatar" />
+			{:else}
+				<User size={20} />
+			{/if}
 		</Button>
 		<SearchBar />
 		<Button variant="icon" radius="out" onclick={() => mapState.locateUser()} aria-label={i18n.t.buttons.locate}>
-			<Navigation size={20} />
+			<Locate size={20} />
 		</Button>
 	</nav>
 </footer>
@@ -65,5 +70,12 @@
 		display: flex;
 		gap: var(--gap-2, 0.5rem);
 		width: 100%;
+	}
+
+	.user-avatar {
+		width: 20px;
+		height: 20px;
+		border-radius: 50%;
+		object-fit: cover;
 	}
 </style>

@@ -2,14 +2,15 @@ import type { I18nDictionary } from '../types';
 
 export const ptBR: I18nDictionary = {
   search: {
-    placeholder: 'Pesquise no LocaLista...',
+    placeholder: 'Pesquise no Monsan Map...',
     noResults: 'Nenhum local encontrado para',
     hints: {
       title: '💡 Dicas de pesquisa:',
       items: [
         'Busque pela rua, bairro, cidade, ponto turístico, empresa ou nome de comércio.',
         'O resultado desejado não apareceu? Tente ser mais específico.',
-        'Rua sem numeração? Só adicionar na sua análise.'
+        'Rua sem numeração? Só adicionar na sua análise.',
+        '💡 Clique no mapa para adicionar um novo local ou deixar uma avaliação.'
       ]
     },
     history: {
@@ -82,7 +83,18 @@ export const ptBR: I18nDictionary = {
     deletePinFailed: 'Erro ao deletar pin.',
     favoriteFailed: 'Erro ao favoritar pin.',
     uploadPhotoFailed: 'Erro ao enviar foto.',
-    loginRequired: 'Você precisa estar logado para realizar esta ação.'
+    loginRequired: 'Você precisa estar logado para realizar esta ação.',
+    invalidCoordinates: 'Coordenadas inválidas.'
+  },
+  ghostPin: {
+    nearbyFound: 'Locais próximos encontrados',
+    nearbyFoundDesc: 'Encontramos {count} local(is) próximo(s). Deseja adicionar um novo ou selecionar um existente?',
+    addNew: 'Adicionar novo local',
+    addNewDesc: 'Nenhum local próximo encontrado. Deseja adicionar um novo marcador aqui?',
+    createNew: 'Criar novo local',
+    create: 'Criar local',
+    loadingAddress: 'Carregando endereço...',
+    selectExisting: 'Selecionar existente'
   },
   success: {
     locationFound: 'Localização encontrada!',

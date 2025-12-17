@@ -2,12 +2,28 @@
 	import { fade } from 'svelte/transition';
 	import { Loader2 } from 'lucide-svelte';
 	import LogoIcon from '$lib/icons/LogoIcon.svelte';
+	import { i18n } from '$lib/i18n/i18n.svelte';
 
 	interface Props {
 		show: boolean;
 	}
 
 	let { show = true }: Props = $props();
+
+	const loadingMessages = [
+		'Expulsando nuvens para melhor visibilidade',
+		'Limpando lentes dos satélites',
+		'Polindo estrelas das análises',
+		'Apagando as luzes do modo dark',
+		'Traduzindo "uai" para todos os idiomas',
+		'Calibrando bússola interna',
+		'Carregando mapas do futuro',
+		'Sincronizando com a galáxia',
+		'Ativando modo explorador',
+		'Preparando aventuras épicas'
+	];
+
+	let currentMessage = $state(loadingMessages[Math.floor(Math.random() * loadingMessages.length)]);
 </script>
 
 {#if show}
@@ -16,9 +32,11 @@
 			<div class="logo">
 				<LogoIcon />
 			</div>
+			<h1 class="app-name">Monsan Map</h1>
 			<div class="loader animate-spin">
 				<Loader2 size={32} />
 			</div>
+			<p class="loading-message">{currentMessage}...</p>
 		</div>
 	</div>
 {/if}
@@ -38,7 +56,8 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: var(--xl);
+		gap: var(--lg);
+		text-align: center;
 	}
 
 	.logo {
@@ -46,6 +65,21 @@
 		height: 120px;
 		color: var(--brand-primary);
 		animation: pulse 2s ease-in-out infinite;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.app-name {
+		font-size: var(--xxxl);
+		font-weight: 800;
+		color: var(--text-primary);
+		margin: 0;
+		letter-spacing: -0.5px;
+		background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-secondary) 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
 	}
 
 	.loader {
@@ -53,6 +87,15 @@
 		align-items: center;
 		justify-content: center;
 		color: var(--brand-primary);
+	}
+
+	.loading-message {
+		font-size: var(--sm);
+		color: var(--text-secondary);
+		font-style: italic;
+		margin: 0;
+		opacity: 0.8;
+		animation: fadeInOut 3s ease-in-out infinite;
 	}
 
 	@keyframes pulse {
@@ -64,6 +107,16 @@
 		50% {
 			opacity: 0.9;
 			transform: scale(1.03);
+		}
+	}
+
+	@keyframes fadeInOut {
+		0%,
+		100% {
+			opacity: 0.6;
+		}
+		50% {
+			opacity: 1;
 		}
 	}
 </style>

@@ -76,13 +76,13 @@
 
 		let splashClosed = false;
 		
-		// Fecha splash após no máximo 2 segundos (UX melhor)
+		// Fecha splash após no máximo 3.5 segundos para ler a mensagem
 		const maxSplashTimeout = setTimeout(() => {
 			if (!splashClosed) {
 				splashClosed = true;
 				showSplash = false;
 			}
-		}, 2000);
+		}, 3500);
 		
 		const closeSplash = () => {
 			if (!splashClosed) {
@@ -178,7 +178,7 @@
 	<meta name="mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-	<meta name="apple-mobile-web-app-title" content="LocaList" />
+	<meta name="apple-mobile-web-app-title" content="Monsan Map" />
 	<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
 	<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
 	
@@ -198,7 +198,7 @@
 	{#if seoConfig().image}
 		<meta property="og:image" content={seoConfig().image} />
 	{/if}
-	<meta property="og:site_name" content="LocaList" />
+	<meta property="og:site_name" content="Monsan Map" />
 	<meta property="og:locale" content="pt_BR" />
 	
 	<!-- Twitter -->

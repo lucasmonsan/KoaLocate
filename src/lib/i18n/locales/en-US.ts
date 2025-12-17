@@ -2,14 +2,15 @@ import type { I18nDictionary } from '../types';
 
 export const enUS: I18nDictionary = {
   search: {
-    placeholder: 'Search on LocaLista...',
+    placeholder: 'Search on Monsan Map...',
     noResults: 'No location found for',
     hints: {
       title: '💡 Search tips:',
       items: [
         'Search by street, neighborhood, city, landmark, company or business name.',
         'Desired result did not appear? Try being more specific.',
-        'Street without numbering? Just add it in your analysis.'
+        'Street without numbering? Just add it in your analysis.',
+        '💡 Click on the map to add a new location or leave a review.'
       ]
     },
     history: {
@@ -82,7 +83,18 @@ export const enUS: I18nDictionary = {
     deletePinFailed: 'Failed to delete pin.',
     favoriteFailed: 'Failed to favorite pin.',
     uploadPhotoFailed: 'Failed to upload photo.',
-    loginRequired: 'You need to be logged in to perform this action.'
+    loginRequired: 'You need to be logged in to perform this action.',
+    invalidCoordinates: 'Invalid coordinates.'
+  },
+  ghostPin: {
+    nearbyFound: 'Nearby locations found',
+    nearbyFoundDesc: 'We found {count} nearby location(s). Do you want to add a new one or select an existing one?',
+    addNew: 'Add new location',
+    addNewDesc: 'No nearby locations found. Do you want to add a new marker here?',
+    createNew: 'Create new location',
+    create: 'Create location',
+    loadingAddress: 'Loading address...',
+    selectExisting: 'Select existing'
   },
   success: {
     locationFound: 'Location found!',

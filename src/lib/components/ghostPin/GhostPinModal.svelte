@@ -57,26 +57,23 @@
 </script>
 
 {#if ghostPinState.showGhost}
-	<button
-		class="overlay"
-		onclick={handleCancel}
-		transition:fade={{ duration: 200 }}
-		aria-label="Fechar"
-	></button>
+	<button class="overlay" onclick={handleCancel} transition:fade={{ duration: 200 }} aria-label="Fechar"></button>
 
 	<div class="ghost-modal" transition:fly={{ y: 500, duration: 300 }}>
 		{#if ghostPinState.nearbyPins.length > 0}
 			<!-- Aviso de pins próximos -->
 			<div class="warning-section">
 				<div class="warning-icon">
-					<AlertTriangle size={32} />
+					<AlertTriangle size={24} />
 				</div>
-				<h3>Locais próximos encontrados</h3>
-				<p>Encontramos {ghostPinState.nearbyPins.length} {ghostPinState.nearbyPins.length === 1 ? 'local próximo' : 'locais próximos'}. Deseja adicionar um novo ou selecionar um existente?</p>
+				<h3>{i18n.t.ghostPin.nearbyFound}</h3>
+				<p>
+					{i18n.t.ghostPin.nearbyFoundDesc.replace('{count}', ghostPinState.nearbyPins.length.toString())}
+				</p>
 				{#if ghostPinState.loadingAddress}
-					<p class="address-loading">Carregando endereço...</p>
+					<p class="address-loading">{i18n.t.ghostPin.loadingAddress}</p>
 				{:else if ghostPinState.address}
-					<p class="address-text">📍 {ghostPinState.address}</p>
+					<p class="address-text"><strong>{ghostPinState.address}</strong></p>
 				{/if}
 			</div>
 
@@ -86,40 +83,40 @@
 					{@const CategoryIcon = getCategoryIcon(pin.category?.name || 'other')}
 					<button class="nearby-item" onclick={() => handleSelectExisting(pin.id)}>
 						<div class="nearby-icon" style="background-color: {pin.category?.color || '#7f8c8d'};">
-							<CategoryIcon size={20} color="white" />
+							<CategoryIcon size={18} color="white" />
 						</div>
 						<div class="nearby-info">
 							<strong>{pin.name}</strong>
-							<small>{pin.category?.name || 'Outro'}</small>
+							<small>{i18n.t.categories[pin.category?.name || 'other'] || pin.category?.name || i18n.t.categories.other}</small>
 						</div>
 					</button>
 				{/each}
 			</div>
 
 			<!-- Botão criar novo -->
-			<Button variant="primary" onclick={handleCreateNew}>
-				<Plus size={20} />
-				Criar novo local
+			<Button variant="primary" onclick={handleCreateNew} disabled={ghostPinState.loadingAddress || !ghostPinState.address}>
+				<Plus size={18} />
+				{i18n.t.ghostPin.createNew}
 			</Button>
 		{:else}
 			<!-- Sem pins próximos - cria direto -->
 			<div class="empty-section">
 				<div class="empty-icon">
-					<MapPin size={48} />
+					<MapPin size={36} />
 				</div>
-				<h3>Adicionar novo local</h3>
-				<p>Nenhum local próximo encontrado. Deseja adicionar um novo marcador aqui?</p>
+				<h3>{i18n.t.ghostPin.addNew}</h3>
+				<p>{i18n.t.ghostPin.addNewDesc}</p>
 				{#if ghostPinState.loadingAddress}
-					<p class="address-loading">Carregando endereço...</p>
+					<p class="address-loading">{i18n.t.ghostPin.loadingAddress}</p>
 				{:else if ghostPinState.address}
-					<p class="address-text">📍 Criar local em: <strong>{ghostPinState.address}</strong></p>
+					<p class="address-text"><strong>{ghostPinState.address}</strong></p>
 				{/if}
 
 				<div class="actions">
-					<Button variant="ghost" onclick={handleCancel}>Cancelar</Button>
-					<Button variant="primary" onclick={handleCreateNew}>
-						<Plus size={20} />
-						Criar local
+					<Button variant="ghost" onclick={handleCancel}>{i18n.t.buttons.cancel}</Button>
+					<Button variant="primary" onclick={handleCreateNew} disabled={ghostPinState.loadingAddress || !ghostPinState.address}>
+						<Plus size={18} />
+						{i18n.t.ghostPin.create}
 					</Button>
 				</div>
 			</div>
@@ -148,12 +145,12 @@
 		background: var(--surface);
 		border-radius: var(--radius-out) var(--radius-out) 0 0;
 		box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.15);
-		padding: var(--xl);
+		padding: var(--md);
 		max-width: 600px;
 		margin: 0 auto;
 		display: flex;
 		flex-direction: column;
-		gap: var(--lg);
+		gap: var(--sm);
 		max-height: 80vh;
 		overflow-y: auto;
 		text-align: center;
@@ -164,14 +161,14 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: var(--sm);
+		gap: var(--xs);
 		text-align: center;
 	}
 
 	.warning-icon {
 		color: var(--warning);
-		margin-bottom: var(--xs);
-		padding: var(--sm);
+		margin-bottom: var(--xxs);
+		padding: var(--xs);
 		background: color-mix(in srgb, var(--warning) 10%, transparent);
 		border-radius: 50%;
 		display: flex;
@@ -181,8 +178,8 @@
 
 	.empty-icon {
 		color: var(--brand-primary);
-		margin-bottom: var(--xs);
-		padding: var(--md);
+		margin-bottom: var(--xxs);
+		padding: var(--sm);
 		background: color-mix(in srgb, var(--brand-primary) 10%, transparent);
 		border-radius: 50%;
 		display: flex;
@@ -191,7 +188,7 @@
 	}
 
 	h3 {
-		font-size: var(--xl);
+		font-size: var(--lg);
 		font-weight: 700;
 		color: var(--text-primary);
 		margin: 0;
@@ -203,14 +200,14 @@
 		color: var(--text-secondary);
 		margin: 0;
 		max-width: 450px;
-		line-height: 1.5;
+		line-height: 1.4;
 	}
 
 	.address-text {
 		font-size: var(--sm);
 		color: var(--text-primary);
-		margin-top: var(--sm);
-		padding: var(--sm) var(--md);
+		margin-top: var(--xs);
+		padding: var(--xs) var(--sm);
 		background: linear-gradient(135deg, var(--bg) 0%, var(--bg-2) 100%);
 		border-radius: var(--radius-md);
 		border: 2px solid color-mix(in srgb, var(--brand-primary) 20%, transparent);
@@ -219,27 +216,27 @@
 
 	.address-text strong {
 		color: var(--brand-primary);
-		font-weight: 700;
+		font-weight: 600;
 	}
 
 	.address-loading {
 		font-size: var(--xs);
 		color: var(--text-secondary);
 		font-style: italic;
-		margin-top: var(--xs);
+		margin-top: var(--xxs);
 	}
 
 	.nearby-list {
 		display: flex;
 		flex-direction: column;
-		gap: var(--xs);
+		gap: var(--xxs);
 	}
 
 	.nearby-item {
 		display: flex;
 		align-items: center;
-		gap: var(--sm);
-		padding: var(--sm);
+		gap: var(--xs);
+		padding: var(--xs);
 		background: var(--bg);
 		border: 2px solid var(--border-color);
 		border-radius: var(--radius-md);
@@ -256,8 +253,8 @@
 	}
 
 	.nearby-icon {
-		width: 40px;
-		height: 40px;
+		width: 36px;
+		height: 36px;
 		border-radius: 50%;
 		display: flex;
 		align-items: center;
@@ -268,6 +265,7 @@
 	.nearby-info {
 		display: flex;
 		flex-direction: column;
+		gap: 2px;
 	}
 
 	.nearby-info strong {
@@ -283,9 +281,9 @@
 
 	.actions {
 		display: flex;
-		gap: var(--sm);
+		gap: var(--xs);
 		width: 100%;
-		margin-top: var(--lg);
+		margin-top: var(--sm);
 	}
 
 	.actions :global(button) {
@@ -301,4 +299,3 @@
 		}
 	}
 </style>
-

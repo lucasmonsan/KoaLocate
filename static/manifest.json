@@ -1,6 +1,6 @@
 {
-	"name": "LocaList - Mapeamento Colaborativo",
-	"short_name": "LocaList",
+	"name": "Monsan Map - Mapeamento Colaborativo",
+	"short_name": "Monsan Map",
 	"description": "Descubra, avalie e compartilhe lugares incríveis",
 	"start_url": "/",
 	"display": "standalone",

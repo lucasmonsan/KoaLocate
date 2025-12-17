@@ -4,7 +4,7 @@
 	import { themeState } from '$lib/stores/theme.svelte';
 	import { authState } from '$lib/stores/auth.svelte';
 	import type { Locale } from '$lib/i18n/types';
-	import { Sun, Moon, Languages, Star, MessageSquare, Key, LogOut, Info } from 'lucide-svelte';
+	import { Sun, Moon, SunMoon, Languages, Star, MessageSquare, Key, LogOut, Info } from 'lucide-svelte';
 	import { haptics } from '$lib/utils/haptics';
 
 	interface Props {
@@ -14,13 +14,9 @@
 
 	let { isOpen, onClose }: Props = $props();
 
-	let themeExpanded = $state(false);
-	let languageExpanded = $state(false);
-
 	const themes = [
-		{ value: 'light', icon: Sun },
-		{ value: 'auto', icon: Sun },
-		{ value: 'dark', icon: Moon }
+		{ value: 'light', icon: Sun, label: i18n.t.profile.theme.light },
+		{ value: 'dark', icon: Moon, label: i18n.t.profile.theme.dark }
 	];
 
 	const languages: { value: Locale; label: string; flag: string }[] = [
@@ -28,44 +24,14 @@
 		{ value: 'en-US', label: 'English', flag: '🇺🇸' }
 	];
 
-	function toggleTheme() {
-		themeExpanded = !themeExpanded;
-		if (themeExpanded) languageExpanded = false;
-	}
-
-	function toggleLanguage() {
-		languageExpanded = !languageExpanded;
-		if (languageExpanded) themeExpanded = false;
-	}
-
 	function handleThemeSelect(value: string) {
 		haptics.light();
 		themeState.set(value);
-		themeExpanded = false;
 	}
 
 	function handleLanguageSelect(value: Locale) {
 		haptics.light();
 		i18n.setLocale(value);
-		languageExpanded = false;
-	}
-
-	function getThemeLabel(theme: string): string {
-		if (theme === 'light') return i18n.t.profile.theme.light;
-		if (theme === 'dark') return i18n.t.profile.theme.dark;
-		return i18n.t.profile.theme.auto;
-	}
-
-	function getLanguageLabel(locale: Locale): string {
-		const lang = languages.find((l) => l.value === locale);
-		return lang ? lang.label : 'Português';
-	}
-
-	function getThemeIcon() {
-		const theme = themeState.value;
-		if (theme === 'light') return Sun;
-		if (theme === 'dark') return Moon;
-		return Sun;
 	}
 
 	function handleClickOutside(e: MouseEvent) {
@@ -97,52 +63,36 @@
 
 {#if isOpen}
 	<div class="profile-menu shadow" transition:slideUp>
-		<section>
-			<button class="collapsible" onclick={toggleTheme} aria-expanded={themeExpanded}>
-				<span class="collapsible-content">
-					<span class="icon-wrapper">
-						<svelte:component this={getThemeIcon()} size={18} />
-					</span>
-					{i18n.t.profile.theme.title}: <strong>{getThemeLabel(themeState.value)}</strong>
-				</span>
-				<span class="arrow" class:expanded={themeExpanded}>▼</span>
-			</button>
-
-			{#if themeExpanded}
-				<div class="options" transition:slideUp={{ duration: 200 }}>
-					{#each themes as theme}
-						<button class="option" class:active={themeState.value === theme.value} onclick={() => handleThemeSelect(theme.value)}>
-							<span class="icon-wrapper small">
-								<svelte:component this={theme.icon} size={16} />
-							</span>
-							{getThemeLabel(theme.value)}
-						</button>
-					{/each}
-				</div>
-			{/if}
+		<section class="settings-row">
+			<label class="section-label">{i18n.t.profile.theme.title}</label>
+			<div class="theme-toggle">
+				{#each themes as theme}
+					<button
+						class="theme-button"
+						class:active={themeState.value === theme.value}
+						onclick={() => handleThemeSelect(theme.value)}
+						aria-label={theme.label}
+					>
+						<svelte:component this={theme.icon} size={18} />
+					</button>
+				{/each}
+			</div>
 		</section>
 
-		<section>
-			<button class="collapsible" onclick={toggleLanguage} aria-expanded={languageExpanded}>
-				<span class="collapsible-content">
-					<span class="icon-wrapper">
-						<Languages size={18} />
-					</span>
-					{i18n.t.profile.language.title}: <strong>{getLanguageLabel(i18n.locale)}</strong>
-				</span>
-				<span class="arrow" class:expanded={languageExpanded}>▼</span>
-			</button>
-
-			{#if languageExpanded}
-				<div class="options" transition:slideUp={{ duration: 200 }}>
-					{#each languages as lang}
-						<button class="option" class:active={i18n.locale === lang.value} onclick={() => handleLanguageSelect(lang.value)}>
-							{lang.flag}
-							{lang.label}
-						</button>
-					{/each}
-				</div>
-			{/if}
+		<section class="settings-row">
+			<label class="section-label">{i18n.t.profile.language.title}</label>
+			<div class="language-toggle">
+				{#each languages as lang}
+					<button
+						class="language-button"
+						class:active={i18n.locale === lang.value}
+						onclick={() => handleLanguageSelect(lang.value)}
+						aria-label={lang.label}
+					>
+						{lang.flag} {lang.label}
+					</button>
+				{/each}
+			</div>
 		</section>
 
 		<div class="separator"></div>
@@ -172,15 +122,15 @@
 
 		<section class="action">
 			{#if authState.user}
-				<div class="user-info">
-					<small>{authState.user.email}</small>
+				<div class="user-action">
+					<small class="user-email">{authState.user.email}</small>
+					<button class="logout" onclick={() => authState.signOut()}>
+						<span class="icon-wrapper small">
+							<LogOut size={16} />
+						</span>
+						{i18n.t.profile.logout}
+					</button>
 				</div>
-				<button class="logout" onclick={() => authState.signOut()}>
-					<span class="icon-wrapper small">
-						<LogOut size={16} />
-					</span>
-					{i18n.t.profile.logout}
-				</button>
 			{:else}
 				<a
 					href={`https://monsan.duckdns.org/login?redirect=${encodeURIComponent(typeof window !== 'undefined' ? window.location.origin : 'https://map.monsan.duckdns.org')}`}
@@ -220,31 +170,60 @@
 		gap: var(--xxxs);
 	}
 
-	.collapsible {
-		width: 100%;
+	.settings-row {
 		display: flex;
-		justify-content: space-between;
 		align-items: center;
+		justify-content: space-between;
+		gap: var(--sm);
+		padding: 0 var(--xs);
+	}
+
+	.section-label {
+		flex-shrink: 0;
+		font-size: var(--xs);
+		font-weight: 600;
+		color: var(--text-secondary);
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+		margin: 0;
+	}
+
+	.theme-toggle,
+	.language-toggle {
+		display: flex;
+		gap: var(--xxs);
+		background: var(--bg);
+		border-radius: var(--radius-md);
+		padding: 2px;
+	}
+
+	.theme-button,
+	.language-button {
+		flex: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: var(--xxs);
 		padding: var(--xxs) var(--xs);
 		background: transparent;
 		border: none;
-		border-radius: var(--radius-in);
+		border-radius: var(--radius-sm);
 		cursor: pointer;
 		font-size: var(--sm);
-		font-weight: 600;
-		color: var(--text-primary);
-		transition: background var(--fast);
-		text-align: left;
+		font-weight: 500;
+		color: var(--text-secondary);
+		transition: all 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
 
-		&:hover {
-			background: var(--bg);
+		&:hover:not(.active) {
+			background: color-mix(in srgb, var(--text-primary) 5%, transparent);
 		}
-	}
 
-	.collapsible-content {
-		display: flex;
-		align-items: center;
-		gap: var(--xxs);
+		&.active {
+			background: var(--brand-primary);
+			color: var(--surface);
+			font-weight: 600;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		}
 	}
 
 	.icon-wrapper {
@@ -259,54 +238,6 @@
 		&.small {
 			width: var(--md);
 			height: var(--md);
-		}
-	}
-
-	.arrow {
-		font-size: var(--xs);
-		transition: transform var(--fast);
-		color: var(--text-secondary);
-
-		&.expanded {
-			transform: rotate(180deg);
-		}
-	}
-
-	.options {
-		display: flex;
-		flex-direction: column;
-		gap: var(--xxxs);
-		padding-left: var(--xs);
-	}
-
-	.option {
-		width: 100%;
-		display: flex;
-		align-items: center;
-		gap: var(--xxs);
-		padding: var(--xxs) var(--xs);
-		text-align: left;
-		background: transparent;
-		border: none;
-		border-radius: var(--radius-in);
-		cursor: pointer;
-		font-size: var(--sm);
-		font-weight: 500;
-		color: var(--text-primary);
-		transition: background var(--fast);
-
-		&:hover {
-			background: var(--bg);
-		}
-
-		&.active {
-			background: var(--brand-primary);
-			color: var(--surface);
-			font-weight: 600;
-		}
-
-		&.active .icon-wrapper {
-			color: var(--surface);
 		}
 	}
 
@@ -386,11 +317,20 @@
 		color: var(--error);
 	}
 
-	.user-info {
-		padding: 0 var(--xs);
-		margin-bottom: var(--xxs);
-		text-align: center;
+	.user-action {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--xs);
+		padding: var(--xxs) var(--xs);
+	}
+
+	.user-email {
+		flex: 1;
+		font-size: var(--sm);
+		color: var(--text-secondary);
 		overflow: hidden;
 		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 </style>

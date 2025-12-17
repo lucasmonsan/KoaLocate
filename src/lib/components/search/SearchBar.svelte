@@ -74,6 +74,7 @@
 
 	<Button
 		variant="ghost"
+		invisible={searchState.query === ''}
 		onclick={() => searchState.query !== '' && handleClear()}
 		type="button"
 		disabled={searchState.loading}

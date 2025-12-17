@@ -564,6 +564,60 @@ TAREFA 1.7: Auditoria completa de acessibilidade (a11y)
 - Navegar TODO o app apenas com teclado
 - Testar com screen reader (NVDA no Windows)
 
+───────────────────────────────────────────────────────────────────────────────
+TAREFA 1.8: Melhorias de UX e refinamentos visuais (CONCLUÍDO)
+───────────────────────────────────────────────────────────────────────────────
+
+**Prioridade**: 🟠 ALTA
+**Tempo estimado**: 4-6 horas
+**Status**: ✅ CONCLUÍDO
+
+**O que foi feito**:
+
+1. **Ghost Pin - Centralização perfeita**:
+   - Ajustado `iconAnchor` para `[20, 40]` (centro horizontal, ponta inferior)
+   - Pulse animation centralizado ao redor do pin
+   - Ícone SVG 28x28px para melhor visibilidade
+
+2. **GhostPinModal - Espaçamento e i18n**:
+   - Reduzidos espaços exagerados (padding de `var(--xl)` para `var(--md)`)
+   - Removido texto "Criar local em:" + emoji, deixando apenas endereço
+   - Todos os textos traduzidos (pt-BR + en-US)
+   - Adicionadas traduções em `ghostPin.*` no i18n
+
+3. **Button Component - Repaginado**:
+   - Variante `invisible` para botões sem hover visível
+   - Melhor estética com cores e sombras apropriadas
+   - Hover invisível quando necessário (ex: botão de pesquisa vazio)
+   - Suporte para `primary`, `secondary`, `outline`, `ghost`, `icon`
+
+4. **ProfileMenu - Toggle Switch e Buttons**:
+   - Tema como toggle switch (3 botões: light/auto/dark)
+   - Idioma como buttons com bandeiras (pt-BR/en-US)
+   - Email e botão "Sair" na mesma linha quando logado
+   - UI mais compacta e moderna
+
+5. **Ícone GPS melhorado**:
+   - Substituído `Navigation` por `Locate` (Lucide)
+   - Mais representativo de GPS/localização
+
+6. **Foto do usuário no botão profile**:
+   - Mostra avatar do usuário se logado e tiver foto
+   - Fallback para ícone `User` se não tiver foto
+
+7. **Feedback para clicar no mapa**:
+   - Adicionado nas dicas de pesquisa: "💡 Clique no mapa para adicionar um novo local ou deixar uma avaliação."
+   - Aparece quando usuário foca na barra de pesquisa vazia
+
+8. **Splash Screen melhorada**:
+   - Mensagens humoradas estilo The Sims (aleatórias a cada acesso)
+   - Nome da aplicação "Monsan Map" exibido
+   - Mensagens: "Expulsando nuvens...", "Limpando lentes dos satélites...", etc.
+
+9. **Renomeação para "Monsan Map"**:
+   - Todos os lugares atualizados (SEO, manifest, meta tags, i18n)
+   - Consistência em todo o projeto
+
 ═══════════════════════════════════════════════════════════════════════════════
 🎨 FASE 2: ALTA - MELHORIAS DE UX E QUALIDADE (RECOMENDADO)
 ═══════════════════════════════════════════════════════════════════════════════
@@ -818,103 +872,30 @@ TAREFA 2.4: Expandir lista de palavras proibidas (moderação)
 Melhorias de performance, UX e refinamento visual. Importantes mas não bloqueantes.
 
 ───────────────────────────────────────────────────────────────────────────────
-TAREFA 3.1: Tema como toggle switch (UX melhorada)
+TAREFA 3.1: Tema como toggle switch (UX melhorada) ✅ CONCLUÍDO
 ───────────────────────────────────────────────────────────────────────────────
 
 **Prioridade**: 🟡 MÉDIA
 **Tempo estimado**: 1-2 horas
+**Status**: ✅ CONCLUÍDO
 
-**O que fazer**:
-
-1. Em `ProfileMenu.svelte`, substituir lista por segmented control:
-   ```svelte
-   <div class="theme-toggle">
-     <button
-       class:active={theme === 'light'}
-       onclick={() => themeState.setTheme('light')}
-       aria-label="Tema claro"
-     >
-       <Sun size={18} />
-     </button>
-     <button
-       class:active={theme === 'auto'}
-       onclick={() => themeState.setTheme('auto')}
-       aria-label="Tema automático"
-     >
-       <SunMoon size={18} />
-     </button>
-     <button
-       class:active={theme === 'dark'}
-       onclick={() => themeState.setTheme('dark')}
-       aria-label="Tema escuro"
-     >
-       <Moon size={18} />
-     </button>
-   </div>
-   ```
-
-2. CSS:
-   ```css
-   .theme-toggle {
-     display: flex;
-     gap: 0;
-     background: var(--bg-2);
-     border-radius: var(--radius-md);
-     padding: 2px;
-   }
-   
-   .theme-toggle button {
-     padding: var(--xs) var(--sm);
-     border: none;
-     background: transparent;
-     color: var(--text-secondary);
-     transition: all 200ms;
-   }
-   
-   .theme-toggle button.active {
-     background: var(--brand-primary);
-     color: white;
-     border-radius: var(--radius-sm);
-   }
-   ```
-
-**Teste**:
-- Alternar tema → verificar animação suave
-- Verificar visual compacto
+**O que foi feito**:
+- Tema implementado como toggle switch com 3 botões (light/auto/dark)
+- Visual compacto e moderno
+- Integrado com ProfileMenu
 
 ───────────────────────────────────────────────────────────────────────────────
-TAREFA 3.2: Idioma com radio buttons de bandeiras
+TAREFA 3.2: Idioma com radio buttons de bandeiras ✅ CONCLUÍDO
 ───────────────────────────────────────────────────────────────────────────────
 
 **Prioridade**: 🟡 MÉDIA
 **Tempo estimado**: 1 hora
+**Status**: ✅ CONCLUÍDO
 
-**O que fazer**:
-
-1. Em `ProfileMenu.svelte`:
-   ```svelte
-   <div class="language-toggle">
-     <button
-       class:active={locale === 'pt-BR'}
-       onclick={() => i18n.setLocale('pt-BR')}
-       aria-label="Português"
-     >
-       🇧🇷 Português
-     </button>
-     <button
-       class:active={locale === 'en-US'}
-       onclick={() => i18n.setLocale('en-US')}
-       aria-label="English"
-     >
-       🇺🇸 English
-     </button>
-   </div>
-   ```
-
-2. CSS (mesmo do theme-toggle)
-
-**Teste**:
-- Alternar idioma → verificar UI atualiza
+**O que foi feito**:
+- Idioma implementado como buttons com bandeiras (🇧🇷 Português / 🇺🇸 English)
+- Visual consistente com theme-toggle
+- Integrado com ProfileMenu
 
 ───────────────────────────────────────────────────────────────────────────────
 TAREFA 3.3: Melhorar efeito de loading da SearchBar
@@ -1220,32 +1201,16 @@ TAREFA 4.1: Melhorar hover dos buttons
 - Hover em botões → verificar animação suave
 
 ───────────────────────────────────────────────────────────────────────────────
-TAREFA 4.2: Melhorar ícone de GPS
+TAREFA 4.2: Melhorar ícone de GPS ✅ CONCLUÍDO
 ───────────────────────────────────────────────────────────────────────────────
 
 **Prioridade**: 🟢 BAIXA
 **Tempo estimado**: 30 minutos
+**Status**: ✅ CONCLUÍDO
 
-**O que fazer**:
-
-1. Em `Dock.svelte`, substituir `Navigation` por `Locate`:
-   ```svelte
-   import { Locate } from 'lucide-svelte';
-   
-   <button onclick={handleCenterOnUser} aria-label="Centralizar no GPS">
-     <Locate size={24} />
-   </button>
-   ```
-
-2. Adicionar pulse quando localizando:
-   ```css
-   .gps-button.locating {
-     animation: pulse 1s infinite;
-   }
-   ```
-
-**Teste**:
-- Clicar em GPS → verificar ícone mais representativo
+**O que foi feito**:
+- Substituído `Navigation` por `Locate` (Lucide)
+- Ícone mais representativo de GPS/localização
 
 ───────────────────────────────────────────────────────────────────────────────
 TAREFA 4.3: Criar reviews aleatórios para teste (BH e Curitiba)

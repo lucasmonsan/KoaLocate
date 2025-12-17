@@ -69,7 +69,7 @@
 				<Download size={24} />
 			</div>
 			<div class="text">
-				<strong>Instalar LocaList</strong>
+				<strong>Instalar Monsan Map</strong>
 				<p>Adicione à tela inicial para acesso rápido e modo offline</p>
 			</div>
 		</div>
