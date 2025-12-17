@@ -57,7 +57,6 @@
 	justify-content: center;
 	border: 3px solid var(--surface);
 	box-shadow: var(--shadow-md);
-	font-size: var(--md);
 	cursor: pointer;
 	transition: all var(--fast);
 }
@@ -67,9 +66,8 @@
 	box-shadow: var(--shadow-lg);
 }
 
-/* Rotate emoji back */
-.pin-marker-content::before {
+/* Rotate icon back to normal */
+.pin-marker-content svg {
 	transform: rotate(45deg);
-	display: block;
 }
 

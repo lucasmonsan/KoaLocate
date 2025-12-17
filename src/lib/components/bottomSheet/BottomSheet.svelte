@@ -6,6 +6,7 @@
 	import { bottomSheetState } from '$lib/stores/bottomSheet.svelte';
 	import { authState } from '$lib/stores/auth.svelte';
 	import { PinsService } from '$lib/services/pins.service';
+	import { getCategoryIcon } from '$lib/config/categories';
 	import { haptics } from '$lib/utils/haptics';
 	import { toast } from '$lib/components/toast/toast.svelte';
 	import { i18n } from '$lib/i18n/i18n.svelte';
@@ -178,8 +179,9 @@
 			<div class="pin-info">
 				<!-- Category icon -->
 				{#if bottomSheetState.pin.category}
+					{@const CategoryIcon = getCategoryIcon(bottomSheetState.pin.category.name)}
 					<div class="category-badge" style="background-color: {bottomSheetState.pin.category.color};">
-						{bottomSheetState.pin.category.icon}
+						<CategoryIcon size={24} color="white" />
 					</div>
 				{/if}
 
