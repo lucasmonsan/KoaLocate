@@ -9,8 +9,7 @@
 	import { onMount } from 'svelte';
 	import type { PinCategory } from '$lib/types/database.types';
 	import Button from '$lib/components/ui/Button.svelte';
-	import XIcon from '$lib/icons/XIcon.svelte';
-	import ImageIcon from '$lib/icons/ImageIcon.svelte';
+	import { X, Image } from 'lucide-svelte';
 
 	let categories = $state<PinCategory[]>([]);
 	let loading = $state(false);
@@ -135,7 +134,7 @@
 	<header>
 		<h1>{i18n.t.buttons.addPin || 'Adicionar Pin'}</h1>
 		<Button variant="icon" onclick={() => goto('/')} aria-label="Fechar">
-			<XIcon />
+			<X size={20} />
 		</Button>
 	</header>
 
@@ -220,7 +219,7 @@
 							onclick={() => removePhoto(index)}
 							aria-label="Remover foto"
 						>
-							<XIcon />
+							<X size={16} />
 						</button>
 					</div>
 				{/each}
@@ -234,7 +233,7 @@
 							onchange={handlePhotoUpload}
 							disabled={uploading}
 						/>
-						<ImageIcon />
+						<Image size={24} />
 						{uploading ? 'Enviando...' : 'Adicionar'}
 					</label>
 				{/if}

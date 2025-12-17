@@ -2,7 +2,7 @@
 	import type { Toast as ToastType } from '$lib/types/toast.types';
 	import { fly } from 'svelte/transition';
 	import { i18n } from '$lib/i18n/i18n.svelte';
-	import CrossIcon from '$lib/icons/CrossIcon.svelte';
+	import { X } from 'lucide-svelte';
 	import { slideDown } from '$lib/utils/transitions';
 
 	interface Props {
@@ -24,7 +24,7 @@
 	<span class="icon">{icons[toast.type]}</span>
 	<p>{toast.message}</p>
 	<button class="close" onclick={() => onDismiss(toast.id)} aria-label={i18n.t.toast.close}>
-		<CrossIcon />
+		<X size={16} />
 	</button>
 </div>
 

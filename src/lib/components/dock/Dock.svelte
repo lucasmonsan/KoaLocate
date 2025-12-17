@@ -6,9 +6,7 @@
 	import SearchBar from '$lib/components/search/SearchBar.svelte';
 	import SearchHints from '$lib/components/search/SearchHints.svelte';
 	import SearchResults from '$lib/components/search/SearchResults.svelte';
-	import GPSIcon from '$lib/icons/GPSIcon.svelte';
-	import ProfileIcon from '$lib/icons/ProfileIcon.svelte';
-	import PlusIcon from '$lib/icons/PlusIcon.svelte';
+	import { Navigation, User, Plus } from 'lucide-svelte';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { authState } from '$lib/stores/auth.svelte';
 	import ProfileMenu from '../profile/ProfileMenu.svelte';
@@ -39,14 +37,14 @@
 
 	<nav>
 		<Button variant="icon" radius="out" onclick={() => (isMenuOpen = !isMenuOpen)} aria-label={i18n.t.buttons.profile}>
-			<ProfileIcon />
+			<User size={20} />
 		</Button>
 		<SearchBar />
 		<Button variant="icon" radius="out" onclick={handleAddPin} aria-label={i18n.t.buttons.addPin || 'Adicionar Pin'}>
-			<PlusIcon />
+			<Plus size={20} />
 		</Button>
 		<Button variant="icon" radius="out" onclick={() => mapState.locateUser()} aria-label={i18n.t.buttons.locate}>
-			<GPSIcon />
+			<Navigation size={20} />
 		</Button>
 	</nav>
 </footer>

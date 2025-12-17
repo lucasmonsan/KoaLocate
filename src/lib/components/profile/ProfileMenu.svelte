@@ -4,14 +4,7 @@
 	import { themeState } from '$lib/stores/theme.svelte';
 	import { authState } from '$lib/stores/auth.svelte';
 	import type { Locale } from '$lib/i18n/types';
-	import SunIcon from '$lib/icons/SunIcon.svelte';
-	import MoonIcon from '$lib/icons/MoonIcon.svelte';
-	import LanguageIcon from '$lib/icons/LanguageIcon.svelte';
-	import StarIcon from '$lib/icons/StarIcon.svelte';
-	import ReviewsIcon from '$lib/icons/ReviewsIcon.svelte';
-	import KeyIcon from '$lib/icons/KeyIcon.svelte';
-	import TrashIcon from '$lib/icons/TrashIcon.svelte';
-	import InfoIcon from '$lib/icons/InfoIcon.svelte';
+	import { Sun, Moon, Languages, Star, MessageSquare, Key, LogOut, Info } from 'lucide-svelte';
 
 	interface Props {
 		isOpen: boolean;
@@ -24,9 +17,9 @@
 	let languageExpanded = $state(false);
 
 	const themes = [
-		{ value: 'light', icon: SunIcon },
-		{ value: 'auto', icon: SunIcon },
-		{ value: 'dark', icon: MoonIcon }
+		{ value: 'light', icon: Sun },
+		{ value: 'auto', icon: Sun },
+		{ value: 'dark', icon: Moon }
 	];
 
 	const languages: { value: Locale; label: string; flag: string }[] = [
@@ -67,9 +60,9 @@
 
 	function getThemeIcon() {
 		const theme = themeState.value;
-		if (theme === 'light') return SunIcon;
-		if (theme === 'dark') return MoonIcon;
-		return SunIcon;
+		if (theme === 'light') return Sun;
+		if (theme === 'dark') return Moon;
+		return Sun;
 	}
 
 	function handleClickOutside(e: MouseEvent) {
@@ -105,7 +98,7 @@
 			<button class="collapsible" onclick={toggleTheme} aria-expanded={themeExpanded}>
 				<span class="collapsible-content">
 				<span class="icon-wrapper">
-					<svelte:component this={getThemeIcon()} />
+					<svelte:component this={getThemeIcon()} size={18} />
 				</span>
 				{i18n.t.profile.theme.title}: <strong>{getThemeLabel(themeState.value)}</strong>
 				</span>
@@ -117,7 +110,7 @@
 					{#each themes as theme}
 					<button class="option" class:active={themeState.value === theme.value} onclick={() => handleThemeSelect(theme.value)}>
 						<span class="icon-wrapper small">
-							<svelte:component this={theme.icon} />
+							<svelte:component this={theme.icon} size={16} />
 						</span>
 							{getThemeLabel(theme.value)}
 						</button>
@@ -130,7 +123,7 @@
 			<button class="collapsible" onclick={toggleLanguage} aria-expanded={languageExpanded}>
 				<span class="collapsible-content">
 					<span class="icon-wrapper">
-						<LanguageIcon />
+						<Languages size={18} />
 					</span>
 					{i18n.t.profile.language.title}: <strong>{getLanguageLabel(i18n.locale)}</strong>
 				</span>
@@ -154,19 +147,19 @@
 		<section class="links">
 			<a href="/favorites">
 				<span class="icon-wrapper small">
-					<StarIcon />
+					<Star size={16} />
 				</span>
 				{i18n.t.profile.favorites}
 			</a>
 			<a href="/reviews">
 				<span class="icon-wrapper small">
-					<ReviewsIcon />
+					<MessageSquare size={16} />
 				</span>
 				{i18n.t.profile.reviews}
 			</a>
 			<a href="https://github.com/lucasmonsan/localista" target="_blank" rel="noopener noreferrer">
 				<span class="icon-wrapper small">
-					<InfoIcon />
+					<Info size={16} />
 				</span>
 				{i18n.t.profile.about}
 			</a>
@@ -181,7 +174,7 @@
 				</div>
 				<button class="logout" onclick={() => authState.signOut()}>
 					<span class="icon-wrapper small">
-						<TrashIcon />
+						<LogOut size={16} />
 					</span>
 					{i18n.t.profile.logout}
 				</button>
@@ -189,7 +182,7 @@
 			<a href={`https://monsan.duckdns.org/login?redirect=${encodeURIComponent(typeof window !== 'undefined' ? window.location.origin : 'https://map.monsan.duckdns.org')}`} class="login-link">
 				<button class="login">
 					<span class="icon-wrapper small">
-						<KeyIcon />
+						<Key size={16} />
 					</span>
 					{i18n.t.profile.login}
 				</button>

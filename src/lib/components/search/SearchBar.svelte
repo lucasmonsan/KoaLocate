@@ -1,7 +1,5 @@
 <script lang="ts">
-	import CrossIcon from '$lib/icons/CrossIcon.svelte';
-	import SearchIcon from '$lib/icons/SearchIcon.svelte';
-	import LoadingIcon from '$lib/icons/LoadingIcon.svelte';
+	import { X, Search, Loader2 } from 'lucide-svelte';
 	import Button from '../ui/Button.svelte';
 	import { searchState } from './search.svelte';
 	import { i18n } from '$lib/i18n/i18n.svelte';
@@ -82,11 +80,11 @@
 		aria-label={searchState.query === '' ? i18n.t.buttons.search : i18n.t.buttons.clear}
 	>
 		{#if searchState.loading}
-			<LoadingIcon />
+			<Loader2 size={18} class="animate-spin" />
 		{:else if searchState.query === ''}
-			<SearchIcon />
+			<Search size={18} />
 		{:else}
-			<CrossIcon />
+			<X size={18} />
 		{/if}
 	</Button>
 </form>
