@@ -3,6 +3,7 @@
 	import { authState } from '$lib/stores/auth.svelte';
 	import { PinsService } from '$lib/services/pins.service';
 	import { processImage } from '$lib/utils/imageCompression';
+	import { ProfanityFilter } from '$lib/utils/profanityFilter';
 	import { haptics } from '$lib/utils/haptics';
 	import { toast } from '$lib/components/toast/toast.svelte';
 	import { i18n } from '$lib/i18n/i18n.svelte';
@@ -68,6 +69,15 @@
 		if (rating === 0) {
 			toast.error('Selecione uma avaliação');
 			return;
+		}
+
+		// Validação de profanidade
+		if (comment.trim()) {
+			const validation = ProfanityFilter.validateComment(comment);
+			if (!validation.valid) {
+				toast.error(validation.message || 'Comentário inválido');
+				return;
+			}
 		}
 
 		if (loading || uploading) return;
