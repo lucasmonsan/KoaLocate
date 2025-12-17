@@ -50,6 +50,21 @@
 		authState.init(data.supabase, data.session);
 	});
 
+	// Verificar se há código de autenticação na URL (após callback)
+	$effect(() => {
+		if (typeof window !== 'undefined' && page.url.searchParams.has('code')) {
+			// Aguardar um pouco para o callback processar
+			setTimeout(() => {
+				// Forçar verificação de sessão
+				data.supabase.auth.getSession().then(({ data: sessionData }) => {
+					if (sessionData.session) {
+						authState.init(data.supabase, sessionData.session);
+					}
+				});
+			}, 500);
+		}
+	});
+
 	// Geolocalização inicial com timeout inteligente
 	onMount(() => {
 		// Register Service Worker
