@@ -111,6 +111,7 @@ class SearchState {
     this.loading = true;
     this.hasSearched = false;
     this.focusedIndex = -1;
+    this.lastSearchedQuery = this.query; // Atualiza ANTES da busca
 
     try {
       // Tenta cache exato primeiro

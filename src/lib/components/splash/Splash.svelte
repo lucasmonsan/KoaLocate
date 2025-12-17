@@ -16,8 +16,8 @@
 			<div class="logo">
 				<LogoIcon />
 			</div>
-			<div class="loader">
-				<Loader2 size={32} class="animate-spin" />
+			<div class="loader animate-spin">
+				<Loader2 size={32} />
 			</div>
 		</div>
 	</div>

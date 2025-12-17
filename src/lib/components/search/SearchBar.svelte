@@ -80,7 +80,9 @@
 		aria-label={searchState.query === '' ? i18n.t.buttons.search : i18n.t.buttons.clear}
 	>
 		{#if searchState.loading}
-			<Loader2 size={18} class="animate-spin" />
+			<div class="animate-spin" style="display: flex;">
+				<Loader2 size={18} />
+			</div>
 		{:else if searchState.query === ''}
 			<Search size={18} />
 		{:else}

@@ -133,14 +133,14 @@ ul {
 
 /* Lucide icon animations */
 @keyframes spin {
-	from {
+	0% {
 		transform: rotate(0deg);
 	}
-	to {
+	100% {
 		transform: rotate(360deg);
 	}
 }
 
-:global(.animate-spin) {
-	animation: spin 1s linear infinite;
+.animate-spin {
+	animation: spin 1s linear infinite !important;
 }
