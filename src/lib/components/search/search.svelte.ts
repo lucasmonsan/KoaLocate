@@ -7,6 +7,12 @@ import { normalizeStr } from '$lib/utils/string';
 import { toast } from '$lib/components/toast/toast.svelte';
 import { i18n } from '$lib/i18n/i18n.svelte';
 
+interface SearchHistoryItem {
+  query: string;
+  timestamp: number;
+  result: OSMFeature;
+}
+
 class SearchState {
   query = $state('');
   focused = $state(false);
@@ -14,15 +20,20 @@ class SearchState {
   results = $state<OSMFeature[]>([]);
   hasSearched = $state(false);
   focusedIndex = $state(-1);
+  history = $state<SearchHistoryItem[]>([]);
 
   lastSearchedQuery = $state('');
   private isResultSelected = false;
   private initialized = false;
 
+  private readonly HISTORY_KEY = 'search_history';
+  private readonly MAX_HISTORY = 5;
+
   private ensureInitialized() {
     if (!this.initialized && typeof localStorage !== 'undefined') {
       this.initialized = true;
       this.cleanOldCache();
+      this.loadHistory();
     }
   }
 
@@ -129,6 +140,9 @@ class SearchState {
     this.results = [];
     this.focused = false;
     this.focusedIndex = -1;
+
+    // Save to history
+    this.saveToHistory(label, result);
 
     mapState.selectLocation(result);
   }
@@ -349,6 +363,60 @@ class SearchState {
       }
     } catch (e) {
       // Silently fail
+    }
+  }
+
+  // ========== History Management ==========
+
+  private loadHistory() {
+    if (typeof localStorage === 'undefined') return;
+
+    try {
+      const stored = localStorage.getItem(this.HISTORY_KEY);
+      if (stored) {
+        this.history = JSON.parse(stored);
+      }
+    } catch (e) {
+      console.warn('Failed to load search history:', e);
+      this.history = [];
+    }
+  }
+
+  private saveToHistory(query: string, result: OSMFeature) {
+    if (typeof localStorage === 'undefined') return;
+
+    try {
+      // Remove duplicate if exists (by query)
+      const filtered = this.history.filter(item => 
+        item.query.toLowerCase() !== query.toLowerCase()
+      );
+
+      // Add new item at the beginning
+      const newHistory = [
+        { query, timestamp: Date.now(), result },
+        ...filtered
+      ];
+
+      // Keep only MAX_HISTORY items
+      if (newHistory.length > this.MAX_HISTORY) {
+        newHistory.splice(this.MAX_HISTORY);
+      }
+
+      this.history = newHistory;
+      localStorage.setItem(this.HISTORY_KEY, JSON.stringify(newHistory));
+    } catch (e) {
+      console.warn('Failed to save search history:', e);
+    }
+  }
+
+  clearHistory() {
+    if (typeof localStorage === 'undefined') return;
+
+    try {
+      this.history = [];
+      localStorage.removeItem(this.HISTORY_KEY);
+    } catch (e) {
+      console.warn('Failed to clear search history:', e);
     }
   }
 }

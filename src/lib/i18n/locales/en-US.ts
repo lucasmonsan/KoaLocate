@@ -11,6 +11,10 @@ export const enUS: I18nDictionary = {
         'Desired result did not appear? Try being more specific.',
         'Street without numbering? Just add it in your analysis.'
       ]
+    },
+    history: {
+      title: 'Recent searches',
+      clear: 'Clear history'
     }
   },
   buttons: {

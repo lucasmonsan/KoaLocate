@@ -11,6 +11,10 @@ export const ptBR: I18nDictionary = {
         'O resultado desejado não apareceu? Tente ser mais específico.',
         'Rua sem numeração? Só adicionar na sua análise.'
       ]
+    },
+    history: {
+      title: 'Buscas recentes',
+      clear: 'Limpar histórico'
     }
   },
   buttons: {

@@ -6,6 +6,7 @@
 	import SearchBar from '$lib/components/search/SearchBar.svelte';
 	import SearchHints from '$lib/components/search/SearchHints.svelte';
 	import SearchResults from '$lib/components/search/SearchResults.svelte';
+	import SearchHistory from '$lib/components/search/SearchHistory.svelte';
 	import { Navigation, User, Plus } from 'lucide-svelte';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { authState } from '$lib/stores/auth.svelte';
@@ -13,7 +14,18 @@
 	import { goto } from '$app/navigation';
 	import { toast } from '$lib/components/toast/toast.svelte';
 
-	let showHints = $derived(searchState.focused && searchState.results.length === 0 && !searchState.hasSearched);
+	let showHistory = $derived(
+		searchState.focused && 
+		searchState.query === '' && 
+		searchState.history.length > 0 && 
+		!searchState.hasSearched
+	);
+	let showHints = $derived(
+		searchState.focused && 
+		searchState.query === '' && 
+		searchState.history.length === 0 && 
+		!searchState.hasSearched
+	);
 	let showResults = $derived(searchState.results.length > 0 || searchState.hasSearched);
 	let isMenuOpen = $state(false);
 
@@ -31,6 +43,8 @@
 		<ProfileMenu isOpen={isMenuOpen} onClose={() => (isMenuOpen = false)} />
 	{:else if showResults}
 		<SearchResults />
+	{:else if showHistory}
+		<SearchHistory />
 	{:else if showHints}
 		<SearchHints />
 	{/if}
