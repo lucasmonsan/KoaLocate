@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { fly } from 'svelte/transition';
 	import { elasticOut } from 'svelte/easing';
-	import { X, ChevronUp, ChevronDown, MapPin, Star } from 'lucide-svelte';
+	import { X, ChevronUp, ChevronDown, MapPin, Star, MessageSquarePlus } from 'lucide-svelte';
 	import { navigationService } from '$lib/services/navigation.service';
 	import { bottomSheetState } from '$lib/stores/bottomSheet.svelte';
 	import { authState } from '$lib/stores/auth.svelte';
@@ -10,6 +10,9 @@
 	import { haptics } from '$lib/utils/haptics';
 	import { toast } from '$lib/components/toast/toast.svelte';
 	import { i18n } from '$lib/i18n/i18n.svelte';
+	import ReviewItem from '../reviews/ReviewItem.svelte';
+	import ReviewForm from '../reviews/ReviewForm.svelte';
+	import Button from '../ui/Button.svelte';
 
 	let startY = $state(0);
 	let currentY = $state(0);
@@ -17,6 +20,7 @@
 	let sheetElement: HTMLDivElement;
 	let isFavorited = $state(false);
 	let favoriteLoading = $state(false);
+	let showReviewForm = $state(false);
 
 	const DRAG_THRESHOLD = 100; // pixels para confirmar ação
 	const COLLAPSED_HEIGHT = 30; // vh
@@ -29,6 +33,11 @@
 		} else {
 			isFavorited = false;
 		}
+	});
+
+	// Sincronizar showReviewForm com URL
+	$effect(() => {
+		showReviewForm = bottomSheetState.showReviewForm;
 	});
 
 	function handleTouchStart(e: TouchEvent) {
@@ -111,6 +120,34 @@
 		} finally {
 			favoriteLoading = false;
 		}
+	}
+
+	function handleOpenReviewForm() {
+		if (!authState.user) {
+			toast.error(i18n.t.errors.loginRequired);
+			return;
+		}
+		if (!bottomSheetState.pin) return;
+		
+		navigationService.openReviewForm(bottomSheetState.pin.id);
+		haptics.medium();
+	}
+
+	function handleCloseReviewForm() {
+		navigationService.closeReviewForm();
+		haptics.light();
+	}
+
+	async function handleReviewSubmit() {
+		if (!bottomSheetState.pin) return;
+		
+		// Reload pin data
+		const updated = await PinsService.getPinById(bottomSheetState.pin.id, authState.user?.id);
+		if (updated) {
+			bottomSheetState.pin = updated;
+		}
+		
+		handleCloseReviewForm();
 	}
 
 	function handleEscape(e: KeyboardEvent) {
@@ -222,10 +259,33 @@
 						</div>
 					{/if}
 
-					<!-- Reviews section (placeholder for COMMIT 7) -->
+					<!-- Reviews section -->
 					<div class="reviews-section">
-						<h3>{i18n.t.pin?.reviewsTitle || 'Avaliações'}</h3>
-						<p class="placeholder">{i18n.t.pin?.noReviews || 'Nenhuma avaliação ainda. Seja o primeiro!'}</p>
+						<div class="reviews-header">
+							<h3>{i18n.t.pin?.reviewsTitle || 'Avaliações'} ({bottomSheetState.pin.reviews?.length || 0})</h3>
+							<Button variant="ghost" onclick={handleOpenReviewForm}>
+								<MessageSquarePlus size={18} />
+								Avaliar
+							</Button>
+						</div>
+
+						{#if showReviewForm}
+							<ReviewForm 
+								pinId={bottomSheetState.pin.id} 
+								onClose={handleCloseReviewForm}
+								onSubmit={handleReviewSubmit}
+							/>
+						{/if}
+
+						{#if bottomSheetState.pin.reviews && bottomSheetState.pin.reviews.length > 0}
+							<div class="reviews-list">
+								{#each bottomSheetState.pin.reviews as review (review.id)}
+									<ReviewItem {review} onUpdate={handleReviewSubmit} />
+								{/each}
+							</div>
+						{:else}
+							<p class="placeholder">{i18n.t.pin?.noReviews || 'Nenhuma avaliação ainda. Seja o primeiro!'}</p>
+						{/if}
 					</div>
 				</div>
 			{/if}
@@ -414,11 +474,29 @@
 		border-radius: var(--radius-in);
 	}
 
-	.reviews-section h3 {
+	.reviews-section {
+		display: flex;
+		flex-direction: column;
+		gap: var(--md);
+	}
+
+	.reviews-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.reviews-header h3 {
 		font-size: var(--md);
 		font-weight: 600;
 		color: var(--text-primary);
-		margin: 0 0 var(--xs);
+		margin: 0;
+	}
+
+	.reviews-list {
+		display: flex;
+		flex-direction: column;
+		gap: var(--md);
 	}
 
 	.placeholder {

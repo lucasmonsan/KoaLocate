@@ -258,5 +258,90 @@ export class PinsService {
 		// For now, we'll just handle it server-side when deleting the pin
 		console.log('Delete photo:', photoUrl);
 	}
+
+	// ========== Reviews ==========
+
+	/**
+	 * Create review for a pin
+	 */
+	static async createReview(review: {
+		pin_id: string;
+		user_id: string;
+		rating: number;
+		comment?: string | null;
+		photos?: string[] | null;
+	}): Promise<void> {
+		// Check if user already reviewed this pin
+		const { data: existing } = await supabase
+			.from('map_reviews')
+			.select('id')
+			.eq('pin_id', review.pin_id)
+			.eq('user_id', review.user_id)
+			.maybeSingle();
+
+		if (existing) {
+			throw new Error('Você já avaliou este local');
+		}
+
+		const { error } = await supabase.from('map_reviews').insert(review);
+
+		if (error) throw error;
+	}
+
+	/**
+	 * Toggle review upvote
+	 */
+	static async toggleReviewUpvote(reviewId: string, userId: string): Promise<boolean> {
+		const { data: existing } = await supabase
+			.from('map_review_upvotes')
+			.select('id')
+			.eq('review_id', reviewId)
+			.eq('user_id', userId)
+			.maybeSingle();
+
+		if (existing) {
+			const { error } = await supabase
+				.from('map_review_upvotes')
+				.delete()
+				.eq('id', existing.id);
+
+			if (error) throw error;
+			return false;
+		} else {
+			const { error } = await supabase
+				.from('map_review_upvotes')
+				.insert({ review_id: reviewId, user_id: userId });
+
+			if (error) throw error;
+			return true;
+		}
+	}
+
+	/**
+	 * Report review
+	 */
+	static async reportReview(reviewId: string, userId: string): Promise<void> {
+		// Check if already reported
+		const { data: existing } = await supabase
+			.from('map_review_reports')
+			.select('id')
+			.eq('review_id', reviewId)
+			.eq('reported_by', userId)
+			.maybeSingle();
+
+		if (existing) {
+			throw new Error('Você já reportou esta avaliação');
+		}
+
+		const { error } = await supabase
+			.from('map_review_reports')
+			.insert({
+				review_id: reviewId,
+				reported_by: userId,
+				reason: 'inappropriate_content'
+			});
+
+		if (error) throw error;
+	}
 }
 
