@@ -49,6 +49,9 @@
 	}
 
 	.loader {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		color: var(--brand-primary);
 	}
 

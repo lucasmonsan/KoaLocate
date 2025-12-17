@@ -15,6 +15,7 @@
 	import BottomSheet from '$lib/components/bottomSheet/BottomSheet.svelte';
 	import GhostPinModal from '$lib/components/ghostPin/GhostPinModal.svelte';
 	import InstallPrompt from '$lib/components/pwa/InstallPrompt.svelte';
+	import PerformanceMonitor from '$lib/components/debug/PerformanceMonitor.svelte';
 	import { mapState } from '$lib/components/map/map.svelte';
 	import { bottomSheetState } from '$lib/stores/bottomSheet.svelte';
 	import { PinsService } from '$lib/services/pins.service';
@@ -195,6 +196,7 @@
 <Splash show={showSplash} />
 <ToastContainer />
 <InstallPrompt />
+<PerformanceMonitor />
 <Map />
 <BottomSheet />
 <GhostPinModal />
