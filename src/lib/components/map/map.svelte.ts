@@ -14,7 +14,10 @@ class MapState {
   private L: LeafletLibrary | null = null;
   private currentLayer: LeafletMarker | null = null;
   private clusterGroup: any = null; // L.MarkerClusterGroup
+  private userLocationMarker: LeafletMarker | null = null;
   pins = $state<PinWithCategory[]>([]);
+  userLocation = $state<{ lat: number; lng: number } | null>(null);
+  private watchId: number | null = null;
 
   async setMap(mapInstance: LeafletMap | null, leafletLibrary: LeafletLibrary | null) {
     this.map = mapInstance;
@@ -203,6 +206,70 @@ class MapState {
   getBounds() {
     if (!this.map) return null;
     return this.map.getBounds();
+  }
+
+  // ========== User Location ==========
+
+  startWatchingUserLocation() {
+    if (!('geolocation' in navigator)) return;
+
+    this.watchId = navigator.geolocation.watchPosition(
+      (position) => {
+        this.userLocation = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        this.updateUserLocationMarker();
+      },
+      (error) => {
+        console.warn('Geolocation watch error:', error);
+      },
+      {
+        enableHighAccuracy: true,
+        maximumAge: 10000,
+        timeout: 5000
+      }
+    );
+  }
+
+  stopWatchingUserLocation() {
+    if (this.watchId !== null) {
+      navigator.geolocation.clearWatch(this.watchId);
+      this.watchId = null;
+    }
+    if (this.userLocationMarker && this.map) {
+      this.map.removeLayer(this.userLocationMarker);
+      this.userLocationMarker = null;
+    }
+  }
+
+  private updateUserLocationMarker() {
+    if (!this.map || !this.L || !this.userLocation) return;
+
+    // Remove marker antigo se existir
+    if (this.userLocationMarker) {
+      this.map.removeLayer(this.userLocationMarker);
+    }
+
+    const icon = this.L.divIcon({
+      className: 'user-location-pin',
+      html: `
+        <div class="user-pin-marker">
+          <div class="user-pin-pulse"></div>
+          <div class="user-pin-dot"></div>
+        </div>
+      `,
+      iconSize: [40, 40],
+      iconAnchor: [20, 20]
+    });
+
+    this.userLocationMarker = this.L.marker(
+      [this.userLocation.lat, this.userLocation.lng],
+      {
+        icon,
+        zIndexOffset: 1000 // sempre por cima de outros pins
+      }
+    ).addTo(this.map);
   }
 }
 

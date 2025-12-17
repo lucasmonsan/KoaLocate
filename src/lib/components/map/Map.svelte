@@ -97,12 +97,21 @@
 
 		return () => {
 			resizeObserver?.disconnect();
+			mapState.stopWatchingUserLocation();
 			map?.remove();
 			mapState.setMap(null, null);
 			lightTiles = null;
 			darkTiles = null;
 			currentTileLayer = null;
 		};
+	});
+
+	// Iniciar tracking da localização do usuário
+	onMount(() => {
+		// Aguarda um pouco para o mapa estar pronto
+		setTimeout(() => {
+			mapState.startWatchingUserLocation();
+		}, 1000);
 	});
 </script>
 
