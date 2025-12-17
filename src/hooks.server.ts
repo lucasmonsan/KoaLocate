@@ -10,12 +10,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 		{
 			cookies: {
 				get(name) {
-					const value = event.cookies.get(name);
-					console.log('[SSO LocaList] Getting cookie:', name, '=', value ? 'EXISTS' : 'NOT FOUND');
-					return value;
+					return event.cookies.get(name);
 				},
 				set(name, value, options) {
-					console.log('[SSO LocaList] Setting cookie:', name, 'with domain:', '.monsan.duckdns.org', 'options:', JSON.stringify(options));
 					event.cookies.set(name, value, {
 						...options,
 						path: '/',
@@ -23,7 +20,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 					});
 				},
 				remove(name, options) {
-					console.log('[SSO LocaList] Removing cookie:', name);
 					event.cookies.delete(name, {
 						...options,
 						path: '/',
