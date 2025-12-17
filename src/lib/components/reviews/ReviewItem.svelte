@@ -6,6 +6,7 @@
 	import { toast } from '$lib/components/toast/toast.svelte';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { formatRelativeTime } from '$lib/utils/time';
+	import LazyImage from '../ui/LazyImage.svelte';
 	import type { ReviewWithUser } from '$lib/types/database.types';
 
 	interface Props {
@@ -90,7 +91,7 @@
 	{#if review.photos && review.photos.length > 0}
 		<div class="photos">
 			{#each review.photos as photo}
-				<img src={photo} alt="Foto da avaliação" />
+				<LazyImage src={photo} alt="Foto da avaliação" aspectRatio="1/1" />
 			{/each}
 		</div>
 	{/if}
@@ -173,17 +174,14 @@
 		margin-top: var(--xs);
 	}
 
-	.photos img {
-		width: 100%;
+	.photos :global(.lazy-image-wrapper) {
 		height: 80px;
-		object-fit: cover;
 		border-radius: var(--radius-in);
-		background: var(--bg);
 		cursor: pointer;
 		transition: all var(--fast);
 	}
 
-	.photos img:hover {
+	.photos :global(.lazy-image-wrapper):hover {
 		transform: scale(1.05);
 		box-shadow: var(--shadow-md);
 	}

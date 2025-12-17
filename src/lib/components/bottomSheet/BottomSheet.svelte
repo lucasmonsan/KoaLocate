@@ -14,6 +14,7 @@
 	import ReviewForm from '../reviews/ReviewForm.svelte';
 	import Button from '../ui/Button.svelte';
 	import Skeleton from '../ui/Skeleton.svelte';
+	import LazyImage from '../ui/LazyImage.svelte';
 	import { createFocusTrap } from '$lib/utils/focusTrap';
 	import { handleEscapeKey } from '$lib/utils/keyboard';
 	import { onMount } from 'svelte';
@@ -322,7 +323,7 @@
 						{#if bottomSheetState.pin.photos && bottomSheetState.pin.photos.length > 0}
 							<div class="photos-gallery">
 								{#each bottomSheetState.pin.photos as photo}
-									<img src={photo} alt="" />
+									<LazyImage src={photo} alt="Foto do local" aspectRatio="4/3" />
 								{/each}
 							</div>
 						{/if}
