@@ -11,6 +11,7 @@
 	import { validation } from '$lib/utils/validation';
 	import { reverseGeocode, formatAddress } from '$lib/utils/geocoding';
 	import { onMount } from 'svelte';
+	import { fade, fly } from 'svelte/transition';
 	import type { PinCategory } from '$lib/types/database.types';
 	import Button from '$lib/components/ui/Button.svelte';
 	import { X, Image, MapPin, Loader2, Info } from 'lucide-svelte';

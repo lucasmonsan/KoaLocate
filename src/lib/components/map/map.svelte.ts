@@ -102,7 +102,7 @@ class MapState {
             resolve();
           },
           (error) => {
-            console.error('Geolocation error:', error);
+            logger.error('Geolocation error:', error);
             if (error.code === 1) {
               toast.error(i18n.t.errors.locationDenied);
             } else if (error.code === 2) {
