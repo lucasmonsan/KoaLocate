@@ -19,9 +19,12 @@
 	import InstallPrompt from '$lib/components/pwa/InstallPrompt.svelte';
 	import PerformanceMonitor from '$lib/components/debug/PerformanceMonitor.svelte';
 	import OfflineBanner from '$lib/components/ui/OfflineBanner.svelte';
+	import SyncModal from '$lib/components/sync/SyncModal.svelte';
 	import { mapState } from '$lib/components/map/map.svelte';
 	import { bottomSheetState } from '$lib/stores/bottomSheet.svelte';
 	import { PinsService } from '$lib/services/pins.service';
+	import { localDataStore } from '$lib/stores/localData.svelte';
+	import { syncModalState } from '$lib/stores/syncModal.svelte';
 	import '../app.css';
 	import Main from '$lib/components/layout/Main.svelte';
 
@@ -61,6 +64,12 @@
 					}
 				});
 			}, 500);
+		}
+	});
+
+	$effect(() => {
+		if (authState.user && localDataStore.hasLocalData()) {
+			syncModalState.open();
 		}
 	});
 
@@ -277,6 +286,10 @@
 <Map />
 <BottomSheet />
 <GhostPinModal />
+
+{#if syncModalState.isOpen}
+	<SyncModal onClose={() => syncModalState.close()} />
+{/if}
 
 <SkipLink />
 <OfflineBanner />

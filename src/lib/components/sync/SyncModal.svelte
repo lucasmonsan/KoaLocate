@@ -44,19 +44,16 @@
 				const pin = localPins.find((p) => p.id === pinId);
 				if (pin) {
 					try {
-						await PinsService.createPin(
-							{
-								name: pin.name,
-								description: pin.description,
-								latitude: pin.latitude,
-								longitude: pin.longitude,
-								address: pin.address,
-								category_id: pin.category_id,
-								photos: [],
-								user_id: authState.user.id
-							},
-							false
-						);
+						await PinsService.createPin({
+							name: pin.name,
+							description: pin.description,
+							latitude: pin.latitude,
+							longitude: pin.longitude,
+							address: pin.address,
+							category_id: pin.category_id,
+							photos: [],
+							user_id: authState.user.id
+						});
 						localDataStore.removePin(pinId);
 						successCount++;
 					} catch {
@@ -105,8 +102,8 @@
 	const totalSelected = $derived(selectedPins.size + selectedReviews.size + selectedFavorites.size);
 </script>
 
-<div class="sync-modal-overlay" onclick={onClose} transition:slide>
-	<div class="sync-modal" onclick={(e) => e.stopPropagation()}>
+<div class="sync-modal-overlay" onclick={onClose} onkeydown={(e) => e.key === 'Escape' && onClose()} role="button" tabindex="-1" transition:slide>
+	<div class="sync-modal" onclick={(e) => e.stopPropagation()} onkeydown={(e) => e.stopPropagation()} role="dialog" aria-modal="true" tabindex="-1">
 		<header>
 			<h2>Sincronizar Dados Locais</h2>
 			<button class="close-btn" onclick={onClose} aria-label="Fechar">
