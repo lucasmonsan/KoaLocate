@@ -81,7 +81,10 @@
 			showSplash = false;
 		} else {
 			sessionStorage.setItem('splashShown', 'true');
+			showSplash = true;
 
+			const SPLASH_MIN_DURATION = 2000; // 2 segundos mínimo
+			const startTime = Date.now();
 			let splashClosed = false;
 
 			// Fecha splash após no máximo 3.5 segundos para ler a mensagem
@@ -92,10 +95,19 @@
 				}
 			}, 3500);
 
-			const closeSplash = () => {
+			const closeSplash = async () => {
 				if (!splashClosed) {
 					splashClosed = true;
 					clearTimeout(maxSplashTimeout);
+
+					// Garantir tempo mínimo de 2s
+					const elapsed = Date.now() - startTime;
+					const remaining = SPLASH_MIN_DURATION - elapsed;
+
+					if (remaining > 0) {
+						await new Promise((resolve) => setTimeout(resolve, remaining));
+					}
+
 					// Pequeno delay para transição suave
 					setTimeout(() => {
 						showSplash = false;
@@ -111,8 +123,8 @@
 						closeSplash();
 					},
 					() => {
-						// Erro ou negação: centraliza no Brasil
-						mapState.setCenter?.([-14.235, -51.9253]);
+						// Erro ou negação: centraliza em São Paulo
+						mapState.setCenter?.([-23.5505, -46.6333]);
 						closeSplash();
 					},
 					{
@@ -122,7 +134,8 @@
 					}
 				);
 			} else {
-				mapState.setCenter?.([-14.235, -51.9253]);
+				// Sem geolocalização: centraliza em São Paulo
+				mapState.setCenter?.([-23.5505, -46.6333]);
 				closeSplash();
 			}
 
