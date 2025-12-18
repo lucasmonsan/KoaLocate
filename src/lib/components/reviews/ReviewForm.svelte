@@ -9,6 +9,7 @@
 	import { haptics } from '$lib/utils/haptics';
 	import { toast } from '$lib/components/toast/toast.svelte';
 	import { i18n } from '$lib/i18n/i18n.svelte';
+	import { localDataStore } from '$lib/stores/localData.svelte';
 	import Button from '../ui/Button.svelte';
 
 	interface Props {
@@ -214,11 +215,21 @@
 				{/each}
 
 				{#if photos.length < 3}
-					<label class="upload-button" class:uploading>
-						<input type="file" accept="image/*" multiple onchange={handlePhotoUpload} disabled={uploading} />
-						<Image size={24} />
-						{uploading ? 'Processando...' : 'Adicionar'}
-					</label>
+					<div class="photos-section">
+						<label for="photo-upload" class:uploading={uploading || !authState.user} class:disabled={!authState.user}>
+							<Image size={24} />
+							{uploading ? 'Processando...' : i18n.t.review?.addPhotos || 'Adicionar fotos'}
+							{#if !uploading}<span class="optional">(opcional)</span>{/if}
+						</label>
+
+						{#if !authState.user}
+							<p class="offline-notice">
+								📸 {i18n.t.offline?.photosDisabled || 'Upload de fotos disponível apenas com login'}
+							</p>
+						{:else}
+							<input id="photo-upload" type="file" accept="image/*" multiple onchange={handlePhotoUpload} disabled={uploading} />
+						{/if}
+					</div>
 				{/if}
 			</div>
 		</div>
@@ -416,5 +427,25 @@
 
 	.upload-button input {
 		display: none;
+	}
+
+	.offline-notice {
+		font-size: var(--xs);
+		color: var(--warning);
+		margin: var(--xs) 0 0;
+		padding: var(--xs);
+		background: rgba(243, 156, 18, 0.1);
+		border-radius: var(--radius-in);
+		text-align: center;
+	}
+
+	label.disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+
+	label.disabled:hover {
+		background: transparent;
+		transform: none;
 	}
 </style>
