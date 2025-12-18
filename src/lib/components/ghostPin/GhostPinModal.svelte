@@ -163,7 +163,6 @@
 		box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.15);
 		padding: var(--md);
 		max-width: 600px;
-		margin: 0 auto;
 		display: flex;
 		flex-direction: column;
 		gap: var(--sm);
