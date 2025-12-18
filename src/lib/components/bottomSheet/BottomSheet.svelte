@@ -3,6 +3,7 @@
 	import { elasticOut } from 'svelte/easing';
 	import { X, ChevronUp, ChevronDown, MapPin, Star, MessageSquarePlus } from 'lucide-svelte';
 	import { navigationService } from '$lib/services/navigation.service';
+	import { mapState } from '$lib/components/map/map.svelte';
 	import { bottomSheetState } from '$lib/stores/bottomSheet.svelte';
 	import { authState } from '$lib/stores/auth.svelte';
 	import { PinsService } from '$lib/services/pins.service';
@@ -175,6 +176,9 @@
 		const updated = await PinsService.getPinById(bottomSheetState.pin.id, authState.user?.id);
 		if (updated) {
 			bottomSheetState.pin = updated;
+
+			// Update pin color on map based on new rating
+			mapState.updatePinFromReview(updated.id, updated.average_rating);
 		}
 
 		handleCloseReviewForm();
